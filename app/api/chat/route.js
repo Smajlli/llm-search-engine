@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { CohereClient } from "cohere-ai";
 
-const cohere = new CohereClient({token: 'RwD18OIrQqQPwjrN13RHUjQCSWMVBzm1vGIL7nED'});
+const cohere = new CohereClient({token: process.env.COHERE_KEY});
 
 export async function POST(req) {
 
@@ -17,5 +17,4 @@ export async function POST(req) {
     }
 
     return response().then(res => NextResponse.json(res.text));
-    /* return NextResponse.json({msg: 'Its workinnn'}); */
 }
