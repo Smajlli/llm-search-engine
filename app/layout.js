@@ -14,7 +14,10 @@ export default function RootLayout({ children }) {
     <html lang="en">
       
       <body className={inter.className}>
-        <navbar> <Link href={'/chat'}>Chat</Link> <Link href={'/'}>Home</Link></navbar>
+        <navbar className="w-full flex items-center gap-3 h-11 bg-slate-100 mb-8 ">
+           <Link href={'/chat'} className="hover:text-cyan-600 transition-all">Chat</Link> 
+           <Link href={'/'} className="hover:text-cyan-600 transition-all">Home</Link>
+        </navbar>
         {children}
       </body>
     </html>
