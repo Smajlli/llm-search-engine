@@ -6,12 +6,15 @@ import { useState, Suspense } from 'react';
 import axios from 'axios';
 import Response from '@/components/Response';
 import Loading from '@/components/Loading';
+import { supabase } from '@/utils/supabase/supabase';
+import { useRouter } from 'next/navigation';
 
 function Chat() {
     const [answer, setAnswer] = useState('');
     const [question, setQuestion] = useState('');
     const [isQuestion, setIsQuestion] = useState(false);
     const data = new FormData();
+    const router = useRouter();
 
     const handleChange = (e) => {
         setQuestion(e.target.value)
@@ -33,6 +36,12 @@ function Chat() {
         setIsQuestion(!isQuestion);
     }
 
+    const handleLogout = async () => {
+        const { err } = await supabase.auth.signOut();
+        console.log('LOGGED OUT !')
+        router.refresh();
+    }
+
     return <div className=' w-full h-full flex flex-col flex-wrap justify-center items-center'>
             <div className='text-3xl font-bold mb-4'> How can I help You today ? </div>
             <form onSubmit={handleSubmit} className='mb-11'>
@@ -47,6 +56,7 @@ function Chat() {
                 </Suspense>
             </div>
         }
+        <button onClick={handleLogout}>Log out</button>
         </div>
 }
 
