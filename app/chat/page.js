@@ -2,16 +2,16 @@
 
 import '../globals.css'
 import Button from '../../components/Button';
-import { useState, Suspense } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Response from '@/components/Response';
-import Loading from '@/components/Loading';
 import { supabase } from '@/utils/supabase/supabase';
 import { useRouter } from 'next/navigation';
 
 function Chat() {
     const [answer, setAnswer] = useState('');
     const [question, setQuestion] = useState('');
+    const [response, setResponse] = useState([]);
     const [isQuestion, setIsQuestion] = useState(false);
     const data = new FormData();
     const router = useRouter();
@@ -30,11 +30,18 @@ function Chat() {
                 url: '/api/chat',
                 data: data
             }).then(res => setAnswer(res.data))
+            
         } catch(err) {
             console.log(err)
         }
         setIsQuestion(!isQuestion);
     }
+
+    useEffect(() => {
+        if (answer && question) {
+            return setResponse(curr => [...curr, { question, answer }]);
+        }
+    }, [answer])
 
     const handleLogout = async () => {
         const { err } = await supabase.auth.signOut();
@@ -48,12 +55,9 @@ function Chat() {
                 <input type='text' className='rounded-full w-96' onChange={handleChange}></input>
                 <Button text={'Ask'} />
             </form>
-        {!answer || answer.length === 0 && isQuestion === false ? null : 
+        {!response || response.length === 0 && isQuestion === false ? null : 
             <div className='w-4/5'>
-                <p className='font-bold mb-4 text-cyan-600'>{question}</p>
-                <Suspense fallback={<Loading/>}>
-                    <Response answer={answer} />
-                </Suspense>
+                {response.map(r => <Response answer={r.answer} question={r.question} />)}
             </div>
         }
         <button onClick={handleLogout}>Log out</button>
