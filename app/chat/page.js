@@ -12,9 +12,18 @@ function Chat() {
     const [answer, setAnswer] = useState('');
     const [question, setQuestion] = useState('');
     const [response, setResponse] = useState([]);
+    const [user, setUser] = useState();
     const [isQuestion, setIsQuestion] = useState(false);
     const data = new FormData();
     const router = useRouter();
+
+    useEffect(() => {
+         async function getSession() {
+            const { data: {user} } = await supabase.auth.getUser();
+            setUser(user);
+        }
+        getSession();
+    }, [])
 
     const handleChange = (e) => {
         setQuestion(e.target.value)
@@ -60,7 +69,7 @@ function Chat() {
                 {response.map(r => <Response answer={r.answer} question={r.question} />)}
             </div>
         }
-        <button onClick={handleLogout}>Log out</button>
+        {user ? <button onClick={handleLogout}>Log out</button> : null}
         </div>
 }
 
