@@ -31,7 +31,8 @@ function Chat() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        data.append('key',question);
+        data.append('key', question);
+        data.append('userId', user.id);
 
         try {
             await axios({
