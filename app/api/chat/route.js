@@ -31,8 +31,6 @@ export async function POST(req) {
     } catch (err) {
         console.log(err)
     }
-    
-    console.log(chatHistory)
 
     async function response() {
         return cohere.chat({
