@@ -1,13 +1,11 @@
 'use client'
 
 import '../globals.css'
-import Button from '../../components/Button';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Response from '@/components/Response';
 import ChatHistory from '@/components/ChatHistory';
 import { supabase } from '@/utils/supabase/supabase';
-import { useRouter } from 'next/navigation';
 
 function Chat() {
     const [answer, setAnswer] = useState('');
@@ -16,7 +14,6 @@ function Chat() {
     const [user, setUser] = useState();
     const [isQuestion, setIsQuestion] = useState(false);
     const data = new FormData();
-    const router = useRouter();
 
     useEffect(() => {
          async function getSession() {
@@ -54,12 +51,6 @@ function Chat() {
         }
     }, [answer])
 
-    const handleLogout = async () => {
-        const { err } = await supabase.auth.signOut();
-        console.log('LOGGED OUT !')
-        router.refresh();
-    }
-
     return <>
         <div className='grid grid-cols-3 h-screen'>
             {user ? <ChatHistory profileId={user.id} /> : null}
@@ -96,7 +87,6 @@ function Chat() {
                         </button>
                     </div>
                 </form>
-                {user ? <button onClick={handleLogout}>Log out</button> : null}
             </div>
         </div>
     </>
