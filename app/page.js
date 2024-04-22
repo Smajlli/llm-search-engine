@@ -25,7 +25,6 @@ export default function Home() {
         <div className="flex flex-col justify-center items-center h-3/4 w-3/4">
           <div className="text-6xl font-semibold text-center z-10 drop-shadow-xl">Wellcome to LLM powered search engine</div>
           <Link href={'/chat'} className="p-2 mt-8 text-center border-solid border-2 border-orange-400 rounded-2xl hover:border-teal-200 duration-200">Get started</Link>
-          {profile ? <Link href={`/profile/${profile.id}`} className="p-2 mt-8 text-center border-solid border-2 border-orange-400 rounded-2xl hover:border-teal-200 duration-200">Profile</Link> : null}
         </div>
       </div>
     </main>
