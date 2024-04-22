@@ -4,10 +4,12 @@ import '@/app/globals.css'
 
 import { useState } from 'react';
 import { supabase } from '@/utils/supabase/supabase';
+import { useRouter } from 'next/navigation';
 
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const router = useRouter();
 
     const handleEmail = (e) => {
         setEmail(e.target.value)
@@ -23,7 +25,7 @@ function Login() {
                 email,
                 password,
             });
-            console.log('SESSION ESTABLISHED :D', data);
+            router.refresh();
         } catch(err) {
             console.log(err)
         }
