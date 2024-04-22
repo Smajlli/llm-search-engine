@@ -2,7 +2,7 @@ import '@/app/globals.css'
 
 import { supabase } from '@/utils/supabase/supabase';
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
+import Image from 'next/image';
 
 function Profile({id}) {
     const [profile, setProfile] = useState();
@@ -18,8 +18,9 @@ function Profile({id}) {
     if(!profile || profile.length === 0) {
         return null
     } else {
-        return <div className='p-4 bottom-0 fixed overflow-hidden hover:cursor-pointer hover:bg-slate-200 duration-200 border rounded-xl border-none'>
-            <Link href={`/profile/${id}`}> <div> {profile[0].full_name} </div> </Link>
+        return <div className=' flex flex-row items-center w-72 p-2 bottom-0 fixed overflow-hidden hover:cursor-pointer hover:bg-slate-200 duration-200 border rounded-xl border-none'>
+            <Image className='mr-4' src={profile[0].profile_image} width={35} height={35} />
+            <div> {profile[0].full_name} </div>
         </div>
     }
 }
