@@ -6,6 +6,7 @@ import axios from 'axios';
 import Response from '@/components/Response';
 import ChatHistory from '@/components/ChatHistory';
 import { supabase } from '@/utils/supabase/supabase';
+import PulseLoader from 'react-spinners/PulseLoader'
 
 function Chat() {
     const [answer, setAnswer] = useState('');
@@ -13,6 +14,7 @@ function Chat() {
     const [response, setResponse] = useState([]);
     const [user, setUser] = useState();
     const [isQuestion, setIsQuestion] = useState(false);
+    const [loading, setLoading] = useState(false);
     const data = new FormData();
 
     useEffect(() => {
@@ -29,6 +31,7 @@ function Chat() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         data.append('key', question);
         data.append('userId', user.id);
 
@@ -43,6 +46,7 @@ function Chat() {
             console.log(err)
         }
         setIsQuestion(!isQuestion);
+        setLoading(false)
     }
 
     useEffect(() => {
@@ -55,12 +59,13 @@ function Chat() {
         <div className='grid grid-cols-3 h-screen'>
             {user ? <ChatHistory profileId={user.id} /> : null}
             <div className=' w-full h-full flex flex-col flex-wrap justify-end col-span-2 col-end'>
-                {response.length ? null : <div className='text-2xl font-bold mb-4 text-center h-2/4 w-5/6'> How can I help You today ? </div>}
+                {response.length || loading ? null : <div className='text-2xl font-bold mb-4 text-center h-2/4 w-5/6'> How can I help You today ? </div>}
                 {!response || response.length === 0 && isQuestion === false ? null :
                     <div className='w-4/5'>
-                        {response.map(r => <Response answer={r.answer} question={r.question} />)}
+                        {response.map(r => <Response answer={r.answer} question={r.question} userId={user.id} />)}
                     </div>
                 }
+                {loading ? <div className='mb-4'> <PulseLoader loading={loading} color={'#000000'} size={10} aria-label="Loading Spinner" data-testid="loader" /> </div> : null}
                 <form onSubmit={handleSubmit} className='mb-11 w-full text-center'>
                     <div className='flex flex-row border-solid border-2 rounded-full w-5/6 justify-between pr-2'>
                         <input type='text' className='border-none w-3/4 rounded-full' onChange={handleChange}></input>
