@@ -2,7 +2,7 @@
 
 import '@/app/globals.css'
 
-import { useState, useEffect, useInsertionEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '@/utils/supabase/supabase';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -27,7 +27,7 @@ function PopupMenu({id}) {
     if(!profile || profile.length === 0) {
         return null
     } else {
-        return <div className='p-4 flex flex-col w-72 h-36 border-solid border-2 rounded-lg drop-shadow-md absolute bottom-16 bg-white divide-y divide-slate-200'>
+        return <div className='p-4 flex flex-col w-72 h-36 border-solid border-2 rounded-lg drop-shadow-md absolute -bottom-24 bg-white divide-y divide-slate-200'>
             <div className='text-sm py-2 px-4 text-slate-500'> {profile[0].email} </div>
             <div className='flex flex-row py-2 text-sm hover:bg-slate-100 rounded-lg hover:cursor-pointer duration-200 px-4'>
                 <svg
