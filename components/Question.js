@@ -37,7 +37,7 @@ function Question({text, chatId}) {
                 />
             </svg>
         </div>
-        {edit ? <EditChat id={chatId}/> : null}
+        {edit ? <EditChat id={chatId} handleEdit={handleEdit}/> : null}
     </div>
 }
 
