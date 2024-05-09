@@ -3,15 +3,16 @@ import '@/app/globals.css'
 import { supabase } from '@/utils/supabase/supabase';
 import { useRouter } from 'next/navigation';
 
-function EditChat({id}) {
+function EditChat({id, handleEdit}) {
     const router = useRouter();
 
     const handleDelete = async () => {
         const {err} = await supabase.from('chat_history').delete().eq('chat_id', id);
+        handleEdit();
         router.refresh();
     }
 
-    return <div className='w-40 p-2 bg-white border-solid border-2 rounded-lg absolute -right-20 -bottom-8 z-10 shadow-md'>
+    return <div className='w-40 p-2 bg-white border-solid border-2 rounded-lg absolute -right-28 -bottom-10 z-10 shadow-md'>
         <div onClick={handleDelete} className='flex flex-row items-center text-red-500 text-md font-bold hover:bg-slate-200 hover:rounded-lg p-2'>
             <div className='mr-2'>
                 <svg
