@@ -27,7 +27,7 @@ function ChatHistory({profileId}) {
     if(!profileHistory || profileHistory.length === 0) {
         return null
     } else {
-        return <div className='h-screen w-80 bg-slate-50 p-4'>
+        return <div className='h-screen w-80 bg-slate-50 p-4 block'>
             <div className='text-xl font-bold mb-10'>Chat History</div>
             {profileHistory.map((history) => {
                 return <Question text={history.message} chatId={history.chat_id} />})}
