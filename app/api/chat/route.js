@@ -10,6 +10,7 @@ export async function POST(req) {
 
     const question = reqData.get('key');
     const userId = reqData.get('userId');
+    const convoId = reqData.get('convoId');
 
     let chatHistory = [];
 
@@ -17,7 +18,8 @@ export async function POST(req) {
         await supabase.from('chat_history').insert({
             role: "USER",
             message: question,
-            user_id: userId
+            user_id: userId,
+            convo_id: convoId
         })
     } catch(err) {
         console.log(err)
@@ -41,6 +43,6 @@ export async function POST(req) {
     }
 
     return response().then((res) => {
-        return NextResponse.json(res.text)
+        return NextResponse.json(res.text);
     });
 }
