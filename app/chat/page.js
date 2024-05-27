@@ -15,8 +15,10 @@ function Chat() {
     const [user, setUser] = useState();
     const [isQuestion, setIsQuestion] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [convoId, setConvoId] = useState();
     const data = new FormData();
     const renderCount = useRef(0);
+    const responseCounter = useRef(0);
 
     useEffect(() => {
          async function getSession() {
@@ -31,13 +33,27 @@ function Chat() {
             async function createConvo() {
                 const {data} = await supabase.from('conversations').insert({
                     title: 'Random Title'
-                })
+                }).select();
+                setConvoId(data[0]);
             }
             createConvo();
             renderCount.current = renderCount.current + 1;
         }
     }, [])
 
+    useEffect(() => {
+        if(response.length > 0) {
+            async function createDialog() {
+                const {data} = await supabase.from('dialogs').insert({
+                    question: response[responseCounter.current].question,
+                    answer: response[responseCounter.current].answer,
+                    conversation_id: convoId.id 
+                })
+            }
+            createDialog();
+            responseCounter.current = responseCounter.current + 1; 
+        }
+    }, [response])
 
     const handleChange = (e) => {
         setQuestion(e.target.value)
@@ -49,6 +65,7 @@ function Chat() {
 
         data.append('key', question);
         data.append('userId', user.id);
+        data.append('convoId', convoId.id)
 
         try {
             await axios({
@@ -66,7 +83,7 @@ function Chat() {
 
     useEffect(() => {
         if (answer && question) {
-            return setResponse(curr => [...curr, { question, answer }]);
+            setResponse(curr => [...curr, { question, answer }]);
         }
     }, [answer])
 
