@@ -27,10 +27,7 @@ function Signup() {
     }
 
     const handleSignup = async (e) => {
-        e.preventDefault();
-
-        
-
+        e.preventDefault();        
         await supabase.auth.signUp({
             email, 
             password,
