@@ -14,7 +14,7 @@ function ChatHistory({profileId}) {
 
     useEffect(() => {
         async function getHistory() {
-            const {data} = await supabase.from('chat_history').select('*').eq('user_id', profileId)
+            const {data} = await supabase.from('conversations').select('*')
             setProfileHistory(data)
         }
         getHistory();
@@ -30,7 +30,7 @@ function ChatHistory({profileId}) {
         return <div className='h-screen w-80 bg-slate-50 p-4 block'>
             <div className='text-xl font-bold mb-10'>Chat History</div>
             {profileHistory.map((history) => {
-                return <Question text={history.message} chatId={history.chat_id} />})}
+                return <Question text={history.title} convoId={history.id} />})}
             <div className='w-72 fixed bg-slate-200 z-10' onClick={handlePopup}>
                 {popup ? <PopupMenu id={profileId}/> : null}
                 <Profile id={profileId} /> 
