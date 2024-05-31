@@ -16,6 +16,7 @@ function Chat() {
     const [isQuestion, setIsQuestion] = useState(false);
     const [loading, setLoading] = useState(false);
     const [convoId, setConvoId] = useState();
+    const [convoTitle, setConvoTitle] = useState('');
     const data = new FormData();
     const renderCount = useRef(0);
     const responseCounter = useRef(0);
@@ -32,7 +33,7 @@ function Chat() {
         if(renderCount.current === 0) {
             async function createConvo() {
                 const {data} = await supabase.from('conversations').insert({
-                    title: 'Random Title'
+                    title: 'New Conversation'
                 }).select();
                 setConvoId(data[0]);
             }
@@ -54,6 +55,29 @@ function Chat() {
             responseCounter.current = responseCounter.current + 1; 
         }
     }, [response])
+
+    useEffect(() => {
+        if (convoId) {
+            if(convoId.title === "New Conversation" && responseCounter.current === 1) {
+                if(convoTitle) {
+                    async function updateTitle() {
+                        const { data, error } = await supabase.from('conversations').update({
+                            title: convoTitle
+                        }).eq('id', convoId.id).select();
+                        setConvoId(data[0])
+                        console.log('HELLO FROM UPDATE :D');
+                        if (error) {
+                            consoe.log(error)
+                        }
+                    }
+                    updateTitle();
+                }
+            }
+            
+        } else {
+            console.log('CANNOT UPDATE :/')
+        }
+    }, [convoTitle])
 
     const handleChange = (e) => {
         setQuestion(e.target.value)
@@ -77,6 +101,17 @@ function Chat() {
         } catch(err) {
             console.log(err)
         }
+
+        try {
+            await axios({
+                method: 'POST',
+                url: '/api/title',
+                data: data
+            }).then(res => setConvoTitle(res.data));
+        } catch(err) {
+            console.log(err)
+        }
+
         setIsQuestion(!isQuestion);
         setLoading(false)
     }
@@ -86,6 +121,8 @@ function Chat() {
             setResponse(curr => [...curr, { question, answer }]);
         }
     }, [answer])
+
+
 
     return <>
         <div className='w-screen h-screen relative flex'>
