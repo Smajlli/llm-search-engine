@@ -4,8 +4,9 @@ import '@/app/globals.css'
 
 import EditChat from './EditChat';
 import { useState } from 'react';
+import Link from 'next/link';
 
-function Question({text, chatId}) {
+function Question({text, convoId}) {
     const [edit, setEdit] = useState(false);
 
     const handleEdit = () => {
@@ -13,7 +14,7 @@ function Question({text, chatId}) {
     }
 
     return <div className=' group mb-2 py-4 px-2 w-72 h-12 text-xs hover:cursor-pointer hover:bg-slate-200 hover:py-4 duration-200 border rounded-xl border-none flex flex-row items-center justify-between relative'>
-        <div className='inline-block overflow-hidden'> {text} </div>
+        <div className='inline-block overflow-hidden'> <Link href={`/chat/${convoId}`}> {text} </Link> </div>
         <div onClick={handleEdit} className='hidden group-hover:inline-block'>
             <svg
                 width="24"
@@ -37,7 +38,7 @@ function Question({text, chatId}) {
                 />
             </svg>
         </div>
-        {edit ? <EditChat id={chatId} handleEdit={handleEdit}/> : null}
+        {edit ? <EditChat id={convoId} handleEdit={handleEdit}/> : null}
     </div>
 }
 
