@@ -7,7 +7,10 @@ function EditChat({id, handleEdit}) {
     const router = useRouter();
 
     const handleDelete = async () => {
-        const {err} = await supabase.from('chat_history').delete().eq('chat_id', id);
+        const {error} = await supabase.from('conversations').delete().eq('id', id);
+        if(error) {
+            console.log(error)
+        }
         handleEdit();
         router.refresh();
     }
