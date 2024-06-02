@@ -34,6 +34,7 @@ function Chat() {
             async function createConvo() {
                 const {data} = await supabase.from('conversations').insert({
                     title: 'New Conversation'
+
                 }).select();
                 setConvoId(data[0]);
             }
@@ -62,7 +63,8 @@ function Chat() {
                 if(convoTitle) {
                     async function updateTitle() {
                         const { data, error } = await supabase.from('conversations').update({
-                            title: convoTitle
+                            title: convoTitle,
+                            profile_id: user.id
                         }).eq('id', convoId.id).select();
                         setConvoId(data[0])
                         console.log('HELLO FROM UPDATE :D');
@@ -121,9 +123,7 @@ function Chat() {
             setResponse(curr => [...curr, { question, answer }]);
         }
     }, [answer])
-
-
-
+    
     return <>
         <div className='w-screen h-screen relative flex'>
             {user ? <ChatHistory profileId={user.id} /> : null}
