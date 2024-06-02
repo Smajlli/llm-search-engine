@@ -29,8 +29,11 @@ function ChatHistory({profileId}) {
     } else {
         return <div className='h-screen w-80 bg-slate-50 p-4 block'>
             <div className='text-xl font-bold mb-10'>Chat History</div>
-            {profileHistory.map((history) => {
-                return <Question text={history.title} convoId={history.id} />})}
+            {profileHistory.map((history) => { 
+                if(profileId === history.profile_id) {
+                    return <Question text={history.title} convoId={history.id} />
+                }
+            })}
             <div className='w-72 fixed bg-slate-200 z-10' onClick={handlePopup}>
                 {popup ? <PopupMenu id={profileId}/> : null}
                 <Profile id={profileId} /> 
