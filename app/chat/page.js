@@ -7,6 +7,7 @@ import Response from '@/components/Response';
 import ChatHistory from '@/components/ChatHistory';
 import { supabase } from '@/utils/supabase/supabase';
 import PulseLoader from 'react-spinners/PulseLoader'
+import { v4 as uuid } from 'uuid';
 
 function Chat() {
     const [answer, setAnswer] = useState('');
@@ -15,7 +16,7 @@ function Chat() {
     const [user, setUser] = useState();
     const [isQuestion, setIsQuestion] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [convoId, setConvoId] = useState();
+    const [convoId, setConvoId] = useState(uuid());
     const [convoTitle, setConvoTitle] = useState('');
     const data = new FormData();
     const renderCount = useRef(0);
@@ -29,28 +30,29 @@ function Chat() {
         getSession();
     }, [])
 
-    useEffect(() => {
+    async function createConvo() {
         if(renderCount.current === 0) {
-            async function createConvo() {
-                const {data} = await supabase.from('conversations').insert({
-                    title: 'New Conversation'
-
-                }).select();
-                setConvoId(data[0]);
-            }
-            createConvo();
+            const { data } = await supabase.from('conversations').insert({
+                id: convoId,
+                title: 'New Conversation'
+            }).select();
+            
             renderCount.current = renderCount.current + 1;
         }
-    }, [])
+    }
+    
 
     useEffect(() => {
         if(response.length > 0) {
             async function createDialog() {
-                const {data} = await supabase.from('dialogs').insert({
+                const {data, error} = await supabase.from('dialogs').insert({
                     question: response[responseCounter.current].question,
                     answer: response[responseCounter.current].answer,
-                    conversation_id: convoId.id 
+                    conversation_id: convoId 
                 })
+                if(error) {
+                    console.log(error)
+                }
             }
             createDialog();
             responseCounter.current = responseCounter.current + 1; 
@@ -59,23 +61,24 @@ function Chat() {
 
     useEffect(() => {
         if (convoId) {
-            if(convoId.title === "New Conversation" && responseCounter.current === 1) {
-                if(convoTitle) {
-                    async function updateTitle() {
-                        const { data, error } = await supabase.from('conversations').update({
-                            title: convoTitle,
-                            profile_id: user.id
-                        }).eq('id', convoId.id).select();
-                        setConvoId(data[0])
-                        console.log('HELLO FROM UPDATE :D');
+            async function selectAndUpdateConvo() {
+                const { data, error } = await supabase.from('conversations').select('*').eq('id', convoId);
+                if(data.length > 0) {
+                    if (data[0].title === "New Conversation" && responseCounter.current === 1) {
+                        if (convoTitle) {
+                            await supabase.from('conversations').update({
+                                title: convoTitle,
+                                profile_id: user.id
+                            }).eq('id', convoId);
+                        }
                         if (error) {
-                            consoe.log(error)
+                            console.log(error);
                         }
                     }
-                    updateTitle();
                 }
             }
-            
+
+            selectAndUpdateConvo();   
         } else {
             console.log('CANNOT UPDATE :/')
         }
@@ -89,9 +92,11 @@ function Chat() {
         e.preventDefault();
         setLoading(true);
 
+        createConvo();
+        
         data.append('key', question);
         data.append('userId', user.id);
-        data.append('convoId', convoId.id)
+        data.append('convoId', convoId);
 
         try {
             await axios({
