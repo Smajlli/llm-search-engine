@@ -16,7 +16,13 @@
   }
 }
 
+html {
+  @apply h-full;
+}
+
 body {
+  @apply h-full;
+  @apply w-full;
   color: rgb(var(--foreground-rgb));
 }
 
