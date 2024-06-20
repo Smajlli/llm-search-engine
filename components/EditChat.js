@@ -15,8 +15,8 @@ function EditChat({id, handleEdit}) {
         router.refresh();
     }
 
-    return <div className='w-40 p-2 bg-white border-solid border-2 rounded-lg absolute -right-28 -bottom-10 z-10 shadow-md'>
-        <div onClick={handleDelete} className='flex flex-row items-center text-red-500 text-md font-bold hover:bg-slate-200 hover:rounded-lg p-2'>
+    return <div className='block hover:cursor-pointer'>
+        <div onClick={handleDelete} className='flex flex-row items-center text-red-500 text-xs hover:bg-slate-200 hover:rounded-lg p-2'>
             <div className='mr-2'>
                 <svg
                     width="22"
