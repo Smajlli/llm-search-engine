@@ -7,7 +7,7 @@ import { supabase } from '@/utils/supabase/supabase';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-function PopupMenu({id}) {
+function PopupMenu({ id, hanldeModal }) {
     const [profile, setProfile] = useState();
     const router = useRouter();
 
@@ -22,6 +22,10 @@ function PopupMenu({id}) {
     const handleLogout = async () => {
         const {err} = await supabase.auth.signOut();
         router.refresh();
+    }
+
+    const handleSettingsModal = () => {
+        hanldeModal();
     }
 
     if(!profile || profile.length === 0) {
@@ -51,7 +55,7 @@ function PopupMenu({id}) {
                         fill="currentColor"
                     />
                 </svg>
-                <div> <Link href={`/profile/${id}`}>Settings</Link> </div>
+                <div onClick={handleSettingsModal}> Settings </div>
             </div>
             <div className='text-sm py-2 flex flex-row hover:bg-slate-100 rounded-lg hover:cursor-pointer duration-200 px-4'>
                 <svg
