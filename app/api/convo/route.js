@@ -25,8 +25,5 @@ export async function POST(req) {
         })
     }
 
-    response().then(res => console.log(res.text))
-
-
-    return NextResponse.json('ALL GOOD :D')
+    return response().then(res => NextResponse.json(res.text))
 }
