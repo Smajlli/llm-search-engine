@@ -105,12 +105,14 @@ function Chat({params}) {
             {user ? <ChatHistory profileId={user.id} /> : null}
             <div className='w-full h-full flex flex-col items-center justify-between'>
                 <div className='w-full h-full overflow-auto px-64 flex flex-col items-center'>
-                    <div>
-                        {conversation.map(convo => <Response answer={convo.answer} question={convo.question} userId={user.id} />)}
-                        {!response || response.length === 0 && isQuestion === false ? null : response.map(res => <InfiniteScroll dataLength={response.length}> <Response answer={res.answer} question={res.question} userId={user.id} /> </InfiniteScroll>)}
-                        {loading ? <div className='mb-4'> <PulseLoader loading={loading} color={'#000000'} size={10} aria-label="Loading Spinner" data-testid="loader" /> </div> : null}
-                    </div>
-                    <div className='w-3/4 h-32 text-center flex flex-col items-center justify-center fixed bottom-0 bg-white'>
+                    <div className='h-5/6 w-full overflow-auto my-8'>
+                        <InfiniteScroll dataLength={response.length}>
+                            {conversation.map(convo => <Response answer={convo.answer} question={convo.question} userId={user.id} />)}
+                            {!response || response.length === 0 && isQuestion === false ? null : response.map(res => <Response answer={res.answer} question={res.question} userId={user.id} />)}
+                            {loading ? <div className='mb-4'> <PulseLoader loading={loading} color={'#000000'} size={10} aria-label="Loading Spinner" data-testid="loader" /> </div> : null}
+                        </InfiniteScroll> 
+                    </div>   
+                    <div className='w-3/4 h-24 text-center flex flex-col items-center justify-center fixed bottom-0 bg-white'>
                         <form onSubmit={handleSubmit} className='w-2/4 text-center'>
                             <div className='flex flex-row border-solid border-2 rounded-full w-5/6 justify-between pr-2'>
                                 <input type='text' className='border-none w-3/4 rounded-full' onChange={handleChange}></input>
@@ -137,7 +139,7 @@ function Chat({params}) {
                                 </button>
                             </div>
                         </form>
-                    </div>
+                    </div> 
                 </div>
                 
             </div>
