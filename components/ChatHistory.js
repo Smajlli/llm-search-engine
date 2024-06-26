@@ -33,7 +33,7 @@ function ChatHistory({profileId, handleSettings}) {
     if(!profileHistory || profileHistory.length === 0) {
         return null
     } else {
-        return <div className='h-full w-96 bg-slate-50 p-4 block'>
+        return <div className='h-full w-96 bg-slate-50 p-4 hidden md:block px-2 md:px-4'>
             <div className='flex flex-row justify-between items-center p-4'>
                 <div className='text-xl font-bold'>Chat History</div>
                 <Link href={'/chat'} className=' p-2 rounded-lg hover:cursor-pointer hover:bg-slate-200 duration-200'>
