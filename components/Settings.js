@@ -46,11 +46,19 @@ function Settings({profile, handleSettings}) {
         }       
     }
 
+    const deleteChats = async () => {
+        try {
+            const {error} = await supabase.from('conversations').delete().eq('profile_id', profile.id)
+        } catch(error) {
+            console.log(error);
+        }
+    }
+
     const closeSettings = () => {
         handleSettings();
     }
 
-    return <div className='flex flex-col w-1/3 h-96 bg-white boder-solid border-2 rounded-lg absolute z-20 '>
+    return <div className='flex flex-col w-full sm:w-3/4 xl:w-1/3 h-96 bg-white boder-solid border-2 rounded-lg absolute z-20 '>
         <div className='flex flex-row justify-between items-center p-4 border-solid border-b-2'>
             <div className=''>Settings</div>
             <div onClick={closeSettings} className='cursor-pointer hover:bg-slate-100 hover:rounded-full p-2 duration-200'>
@@ -68,18 +76,24 @@ function Settings({profile, handleSettings}) {
                 </svg>
             </div>
         </div>
-        <div className='flex flex-row items-center justify-between p-10'>
-            <div className='flex flex-col h-full justify-evenly'>
+        <div className='flex flex-row items-center justify-between p-10 w-full h-full'>
+            <div className='flex flex-col h-full justify-evenly grow'>
                 <div className='flex justify-center items-center'>
-                    {loading ? <div className='h-24 w-24 flex items-center justify-center'> <PulseLoader loading={loading} color={'#000000'} size={10} aria-label="Loading Spinner" data-testid="loader" /> </div> : avatarImg ? <Image src={`/${avatarImg}.svg`} width={100} height={100} alt='profileImage' /> : <Image src={avatar} width={100} height={100} alt='profileImage' />}
+                    {loading ? <div className='h-24 w-24 flex items-center justify-center'> <PulseLoader loading={loading} color={'#000000'} size={10} aria-label="Loading Spinner" data-testid="loader" /> </div> : avatarImg ? <Image src={`/${avatarImg}.svg`} width={100} height={100} alt='profileImage' className='mb-4' /> : <Image src={avatar} width={100} height={100} alt='profileImage' className='mb-4' />}
                 </div>
-                <button onClick={handleNewAvatar} className='p-2 border-solid border-2 rounded-lg hover:bg-slate-700 hover:text-white duration-200'>Generate random avatar</button>
-                <button onClick={handleSaveAvatar} className='p-2 border-solid border-2 rounded-lg hover:bg-slate-700 hover:text-white duration-200'>Set as avatar</button>
+                <button onClick={handleNewAvatar} className='text-xs sm:text-md p-2 border-solid border-2 rounded-lg hover:bg-slate-700 hover:text-white duration-200 mb-2 w-full text-sm'>Generate random avatar</button>
+                <button onClick={handleSaveAvatar} className='text-xs sm:text-md p-2 border-solid border-2 rounded-lg hover:bg-slate-700 hover:text-white duration-200 w-full text-sm'>Set as avatar</button>
             </div>
-            <div className='flex flex-col justify-evenly h-full'>
-                {user ? <div className='text-slate-500'>Full Name: {user[0].full_name}</div> : null}
-                {user ? <div className='text-slate-500'>Username: {user[0].username} </div> : null}
-                <div>Delete chat history</div>  
+            <div className='flex flex-col justify-center items-start h-full w-8/12 pl-12'>
+                <div className='flex flex-col h-full w-full divide-y divide-slate-200'>
+                    {user ? <div className='text-xs sm:text-md text-slate-500 flex items-center p-2'>Full Name: {user[0].full_name}</div> : null}
+                    {user ? <div className=' text-xs md:text-md text-slate-500 flex items-center p-2'>Username: {user[0].username} </div> : null}
+                    <div className=' text-xs md:text-md flex-items-center p-2'>Language: English</div>
+                </div>  
+                <div className='text-xs sm:text-md flex flex-row justify-between items-center w-full'>
+                    <div>Delete all chats</div>
+                    <button onClick={deleteChats} className='bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-800'>Delete</button>
+                </div>
             </div>
         </div>
     </div>
