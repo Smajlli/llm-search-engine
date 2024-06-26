@@ -11,6 +11,8 @@ import { v4 as uuid } from 'uuid';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Settings from '@/components/Settings';
 import Cover from '@/components/Cover';
+import Navbar from '@/components/Navbar';
+import Sidebar from '@/components/Sidebar';
 
 function Chat() {
     const [answer, setAnswer] = useState('');
@@ -22,6 +24,7 @@ function Chat() {
     const [convoId, setConvoId] = useState(uuid());
     const [convoTitle, setConvoTitle] = useState('');
     const [settings, setSettings] = useState(false);
+    const [sidebar, setSidebar] = useState(false);
     const data = new FormData();
     const renderCount = useRef(0);
     const responseCounter = useRef(0);
@@ -129,6 +132,11 @@ function Chat() {
 
     const handleSettings = () => {
         setSettings(!settings);
+        setSidebar(!sidebar)
+    }
+
+    const handleSidebar = () => {
+        setSidebar(!sidebar);
     }
 
     useEffect(() => {
@@ -138,12 +146,14 @@ function Chat() {
     }, [answer])
     
     return <>
-        {settings ? <Cover /> : null}
-        <div className='h-full w-full overflow-hidden flex items-center justify-center'>
+        {settings || sidebar ? <Cover /> : null}
+        {sidebar ? <Sidebar profileId={user.id} handleSettings={handleSettings} handleSidebar={handleSidebar}/> : null}
+        <Navbar handleSidebar={handleSidebar}/>
+        <div className='h-dvh sm:h-full w-full overflow-hidden flex items-center justify-center'>
             {settings ? <Settings profile={user} handleSettings={handleSettings} />  : null}
             {user ? <ChatHistory profileId={user.id} handleSettings={handleSettings} /> : null}
             <div className='w-full h-full flex flex-col items-center justify-between'>
-                <div className='w-full h-full overflow-auto px-64 flex flex-col items-center'>
+                <div className='w-full h-full overflow-auto px-64 xl:px-44 flex flex-col items-center'>
                     <div className='h-5/6 w-full overflow-auto my-8'>
                         <InfiniteScroll dataLength={response.length}>
                             {!response || response.length === 0 && isQuestion === false ? null : response.map(res => <Response answer={res.answer} question={res.question} userId={user.id} />)}
@@ -151,7 +161,7 @@ function Chat() {
                         </InfiniteScroll>    
                     </div>       
                     <div className='w-3/4 h-24 text-center flex flex-col items-center justify-center fixed bottom-0 bg-white'>
-                        <form onSubmit={handleSubmit} className='w-2/4 text-center'>
+                        <form onSubmit={handleSubmit} className='w-full sm:w-2/4 text-center flex items-center justify-center'>
                             <div className='flex flex-row border-solid border-2 rounded-full w-5/6 justify-between pr-2'>
                                 <input type='text' className='border-none w-3/4 rounded-full' onChange={handleChange}></input>
                                 <button>
