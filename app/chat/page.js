@@ -132,7 +132,7 @@ function Chat() {
 
     const handleSettings = () => {
         setSettings(!settings);
-        setSidebar(!sidebar)
+        setSidebar(!sidebar);
     }
 
     const handleSidebar = () => {
@@ -162,25 +162,19 @@ function Chat() {
                     </div>       
                     <div className='w-3/4 h-24 text-center flex flex-col items-center justify-center fixed bottom-0 bg-white'>
                         <form onSubmit={handleSubmit} className='w-full sm:w-2/4 text-center flex items-center justify-center'>
-                            <div className='flex flex-row border-solid border-2 rounded-full w-5/6 justify-between pr-2'>
-                                <input type='text' className='border-none w-3/4 rounded-full' onChange={handleChange}></input>
-                                <button>
+                            <div className='flex flex-row border-solid rounded-full w-5/6 justify-between pr-2 bg-gray-100 p-1.5'>
+                                <input type='text' className='h-8 border-none w-3/4 rounded-full bg-inherit' onChange={handleChange}></input>
+                                <button className={`py-px px-2 rounded-full ${question.length > 0 ? 'bg-gray-500' : 'bg-gray-300'} duration-200`}>
                                     <svg
-                                        width="24"
-                                        height="24"
+                                        width="18"
+                                        height="18"
                                         viewBox="0 0 24 24"
                                         fill="none"
                                         xmlns="http://www.w3.org/2000/svg"
-                                        className='text-slate-500 h-9 w-9'
+                                        className='text-white font-black'
                                     >
                                         <path
-                                            d="M14.8285 11.9481L16.2427 10.5339L12 6.29122L7.7574 10.5339L9.17161 11.9481L11 10.1196V17.6568H13V10.1196L14.8285 11.9481Z"
-                                            fill="currentColor"
-                                        />
-                                        <path
-                                            fillRule="evenodd"
-                                            clipRule="evenodd"
-                                            d="M19.7782 4.22183C15.4824 -0.0739415 8.51759 -0.0739422 4.22183 4.22183C-0.0739415 8.51759 -0.0739422 15.4824 4.22183 19.7782C8.51759 24.0739 15.4824 24.0739 19.7782 19.7782C24.0739 15.4824 24.0739 8.51759 19.7782 4.22183ZM18.364 5.63604C14.8492 2.12132 9.15076 2.12132 5.63604 5.63604C2.12132 9.15076 2.12132 14.8492 5.63604 18.364C9.15076 21.8787 14.8492 21.8787 18.364 18.364C21.8787 14.8492 21.8787 9.15076 18.364 5.63604Z"
+                                            d="M17.6568 8.96219L16.2393 10.3731L12.9843 7.10285L12.9706 20.7079L10.9706 20.7059L10.9843 7.13806L7.75404 10.3532L6.34314 8.93572L12.0132 3.29211L17.6568 8.96219Z"
                                             fill="currentColor"
                                         />
                                     </svg>
