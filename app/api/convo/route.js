@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { CohereClient } from "cohere-ai";
 import { supabase } from "@/utils/supabase/supabase";
+import Groq from "groq-sdk";
 
-const cohere = new CohereClient({token: process.env.COHERE_KEY});
+const groq = new Groq({apiKey: process.env.GROQ_KEY});
 
 export async function POST(req) {
     const reqData = await req.formData();
@@ -12,18 +12,26 @@ export async function POST(req) {
     let chatHistory = [];
 
     const { data, error } = await supabase.from('chat_history').select('*').eq('convo_id', id);
-    data.map(convo => chatHistory.push(convo));
+    data.map(convo => chatHistory.push({role: convo.role, content: convo.content}));
     if(error) {
         console.log(error);
     }
 
+    async function chat() {
+        return groq.chat.completions.create({
+            messages: [chatHistory[chatHistory.length -1]],
+            model: "llama3-8b-8192",
+            temperature: 0.5,
+            max_tokens: 1024,
+            stop: null,
+            stream: false,
+        });
+    };
+
     async function response() {
-        return cohere.chat({
-            chatHistory,
-            message: chatHistory[chatHistory.length - 1].message,
-            connectors: [{id: 'web-search'}]
-        })
+        const chatCompletion = await chat();
+        return NextResponse.json(chatCompletion.choices[0]?.message?.content || "");
     }
 
-    return response().then(res => NextResponse.json(res.text))
+    return response();
 }
