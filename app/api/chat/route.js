@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server"
-import { CohereClient } from "cohere-ai";
 import { supabase } from "@/utils/supabase/supabase";
+import Groq from "groq-sdk";
 
-const cohere = new CohereClient({token: process.env.COHERE_KEY});
+const groq = new Groq({apiKey: process.env.GROQ_KEY});
 
 export async function POST(req) {
     
@@ -16,8 +16,8 @@ export async function POST(req) {
 
     try {
         await supabase.from('chat_history').insert({
-            role: "USER",
-            message: question,
+            role: "user",
+            content: question,
             user_id: userId,
             convo_id: convoId
         })
@@ -28,21 +28,27 @@ export async function POST(req) {
     try {
         const {data} = await supabase.from('chat_history').select().eq('user_id', userId);
         data.map((res) => {
-            return chatHistory.push({role: res.role, message: res.message});
+            return chatHistory.push({role: res.role, content: res.content});
         })
     } catch (err) {
         console.log(err)
     }
 
+    async function chat() {
+        return groq.chat.completions.create({
+            messages: chatHistory,
+            model: "llama3-8b-8192",
+            temperature: 0.5,
+            max_tokens: 1024,
+            stop: null,
+            stream: false,
+        });
+    };
+
     async function response() {
-        return cohere.chat({
-            chatHistory,
-            message: question,
-            connectors: [{ id: 'web-search' }]
-        })
+        const chatCompletion = await chat();
+        return NextResponse.json(chatCompletion.choices[0]?.message?.content || "");
     }
 
-    return response().then((res) => {
-        return NextResponse.json(res.text);
-    });
+   return response()
 }
