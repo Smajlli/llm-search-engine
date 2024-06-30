@@ -28,6 +28,9 @@ function Chat() {
     const data = new FormData();
     const renderCount = useRef(0);
     const responseCounter = useRef(0);
+    const currentDate = new Date();
+    const date = currentDate.toISOString().toLocaleString('zh-TW');
+    const logo = ':)';
 
     useEffect(() => {
          async function getSession() {
@@ -41,7 +44,8 @@ function Chat() {
         if(renderCount.current === 0) {
             const { data } = await supabase.from('conversations').insert({
                 id: convoId,
-                title: 'New Conversation'
+                title: 'New Conversation',
+                created_at: date
             }).select();
             
             renderCount.current = renderCount.current + 1;
@@ -128,6 +132,7 @@ function Chat() {
 
         setIsQuestion(!isQuestion);
         setLoading(false);
+        setQuestion('');
     }
 
     const handleSettings = () => {
@@ -151,19 +156,22 @@ function Chat() {
         <Navbar handleSidebar={handleSidebar}/>
         <div className='h-dvh sm:h-full w-full overflow-hidden flex items-center justify-center'>
             {settings ? <Settings profile={user} handleSettings={handleSettings} />  : null}
-            {user ? <ChatHistory profileId={user.id} handleSettings={handleSettings} /> : null}
-            <div className='w-full h-full flex flex-col items-center justify-between'>
-                <div className='w-full h-full overflow-auto px-64 xl:px-44 flex flex-col items-center'>
+            {user ? <ChatHistory profileId={user.id} handleSettings={handleSettings} today={date}/> : null}
+            <div className='w-full h-full flex flex-col justify-between'>
+                <div className='w-full h-full overflow-auto flex flex-col justify-center'>
                     <div className='h-5/6 w-full overflow-auto my-8'>
-                        <InfiniteScroll dataLength={response.length}>
+                        {response.length > 0 || loading ? <InfiniteScroll dataLength={response.length} className='w-full xl:px-44'>
                             {!response || response.length === 0 && isQuestion === false ? null : response.map(res => <Response answer={res.answer} question={res.question} userId={user.id} />)}
                             {loading ? <div className='mb-4'> <PulseLoader loading={loading} color={'#000000'} size={10} aria-label="Loading Spinner" data-testid="loader" /> </div> : null}
-                        </InfiniteScroll>    
+                        </InfiniteScroll> : <div className=' w-full h-full text-center flex flex-col justify-center items-center'> 
+                                <div className='text-4xl font-bold'> {logo} SSays </div>
+                                <div className='mt-4'>How can I help you today ?</div>
+                        </div>}   
                     </div>       
                     <div className='w-3/4 h-24 text-center flex flex-col items-center justify-center fixed bottom-0 bg-white'>
                         <form onSubmit={handleSubmit} className='w-full sm:w-2/4 text-center flex items-center justify-center'>
                             <div className='flex flex-row border-solid rounded-full w-5/6 justify-between pr-2 bg-gray-100 p-1.5'>
-                                <input type='text' className='h-8 border-none w-3/4 rounded-full bg-inherit' onChange={handleChange}></input>
+                                <input type='text' className='h-8 w-3/4 rounded-full bg-inherit border-transparent focus:border-transparent focus:ring-0' onChange={handleChange} value={question}></input>
                                 <button className={`py-px px-2 rounded-full ${question.length > 0 ? 'bg-gray-500' : 'bg-gray-300'} duration-200`}>
                                     <svg
                                         width="18"
@@ -183,7 +191,6 @@ function Chat() {
                         </form>
                     </div>
                 </div>
-
             </div>
         </div>
     </>
