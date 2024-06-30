@@ -121,10 +121,10 @@ function Chat({params}) {
         <div className='h-full w-full overflow-hidden flex items-center justify-center'>
             {settings ? <Settings profile={user} handleSettings={handleSettings} /> : null}
             {user ? <ChatHistory profileId={user.id} handleSettings={handleSettings}/> : null}
-            <div className='w-full h-full flex flex-col items-center justify-between'>
-                <div className='w-full h-full overflow-auto px-2 xl:px-44 flex flex-col items-center'>
+            <div className='w-full h-full flex flex-col justify-between'>
+                <div className='w-full h-full overflow-auto px-2 flex flex-col'>
                     <div className='h-5/6 w-full overflow-auto my-8'>
-                        <InfiniteScroll dataLength={response.length}>
+                        <InfiniteScroll dataLength={response.length} className='w-full xl:px-44'>
                             {conversation.map(convo => <Response answer={convo.answer} question={convo.question} userId={user.id} />)}
                             {!response || response.length === 0 && isQuestion === false ? null : response.map(res => <Response answer={res.answer} question={res.question} userId={user.id} />)}
                             {loading ? <div className='mb-4'> <PulseLoader loading={loading} color={'#000000'} size={10} aria-label="Loading Spinner" data-testid="loader" /> </div> : null}
