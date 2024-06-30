@@ -19,7 +19,7 @@ export async function POST(req) {
 
     async function chat() {
         return groq.chat.completions.create({
-            messages: [chatHistory[chatHistory.length -1]],
+            messages: chatHistory,
             model: "llama3-8b-8192",
             temperature: 0.5,
             max_tokens: 1024,
