@@ -26,7 +26,7 @@ export async function POST(req) {
     }
 
     try {
-        const {data} = await supabase.from('chat_history').select().eq('user_id', userId);
+        const {data} = await supabase.from('chat_history').select().eq('convo_id', convoId);
         data.map((res) => {
             return chatHistory.push({role: res.role, content: res.content});
         })
@@ -47,7 +47,7 @@ export async function POST(req) {
 
     async function response() {
         const chatCompletion = await chat();
-        return NextResponse.json(chatCompletion.choices[0]?.message?.content || "");
+        return NextResponse.json(chatCompletion.choices[0]?.message?.content);
     }
 
    return response()
