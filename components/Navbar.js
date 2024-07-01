@@ -7,6 +7,8 @@ function Navbar({handleSidebar}) {
         handleSidebar();
     }
 
+    const logo = ':)';
+
     return <div className='w-full h-10 flex flex-row justify-between items-center px-4 block sm:hidden'>
         <div className='text-slate-500 cursor-pointer' onClick={sidebarOpenClose}>
             <svg
@@ -30,7 +32,7 @@ function Navbar({handleSidebar}) {
                 />
             </svg>
         </div>
-        <div className='text-slate-500'>LLM Chat</div>
+        <div className='text-slate-500 font-bold'>{logo}</div>
         <Link href={'/chat'} className='text-slate-500 cursor-pointer'>
             <svg
                 width="20"
