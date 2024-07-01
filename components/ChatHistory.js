@@ -1,26 +1,52 @@
 'use client'
 
 import '@/app/globals.css'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/utils/supabase/supabase';
 import Profile from './Profile';
 import PopupMenu from './PopupMenu';
-import Question from './Question';
+import QuestionsContainer from './QuestionsContainer';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Link from 'next/link';
 
 
 function ChatHistory({profileId, handleSettings}) {
-    const [profileHistory, setProfileHistory] = useState([]);
+    const [conversations, setConversations] = useState([]);
+    const [todayQuestions, setTodayQuestions] = useState([]);
+    const [olderQuestions, setOlderQestions] = useState([]);
     const [popup, setPopup] = useState(false);
+    const date = new Date();
+    const today = date.getFullYear() + '-'
+        + 0 + (date.getMonth() + 1) + '-'
+        + '0' + date.getDate();
+    const renderCount = useRef(0);
 
     useEffect(() => {
-        async function getHistory() {
-            const {data} = await supabase.from('conversations').select('*')
-            setProfileHistory(data)
+        async function getConversations() {
+            const { data } = await supabase.from('conversations').select('*').eq('profile_id', profileId)
+            setConversations(data);
         }
-        getHistory();
+        getConversations();
     }, [])
+
+    useEffect(() => {
+        if(renderCount.current === 2) {
+           if(conversations.length) {
+               conversations.map((q) => {
+                   if (q.created_at === today) {
+                       setTodayQuestions(curr => [...curr, q]);
+                   } else {
+                       setOlderQestions(curr => [...curr, q]);
+                   }
+                   console.log('Inside statement')
+               })
+           }
+            console.log('Oneee ;)')
+        } else {
+            console.log('Anything but one :(')
+        }
+        renderCount.current = renderCount.current + 1;
+    }, [conversations])
 
     const handlePopup = () => {
         setPopup(!popup);
@@ -30,7 +56,7 @@ function ChatHistory({profileId, handleSettings}) {
         handleSettings();
     }
 
-    if(!profileHistory || profileHistory.length === 0) {
+    if(!conversations || conversations.length === 0) {
         return null
     } else {
         return <div className='h-full w-96 bg-slate-50 p-4 hidden md:block px-2 md:px-4'>
@@ -55,12 +81,9 @@ function ChatHistory({profileId, handleSettings}) {
             </div>
             <div className='h-full flex flex-col justify-between mt-4'>
                 <div className='h-4/6 overflow-auto relative'>
-                    <InfiniteScroll dataLength={profileHistory.length}>
-                        {profileHistory.map((history) => {
-                            if (profileId === history.profile_id) {
-                                return <Question text={history.title} convoId={history.id} />
-                            }
-                        })}
+                    <InfiniteScroll dataLength={conversations.length}>
+                        { todayQuestions.length >= 1 ? <QuestionsContainer questions={todayQuestions} text={'Today'} /> : null } 
+                        { olderQuestions.length > 0 ? <QuestionsContainer questions={olderQuestions} text={'Older'} /> : null }
                     </InfiniteScroll>
                 </div>
                 <div className='w-72 bg-slate-200 z-10' onClick={handlePopup}>
