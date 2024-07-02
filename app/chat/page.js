@@ -28,6 +28,7 @@ function Chat() {
     const data = new FormData();
     const renderCount = useRef(0);
     const responseCounter = useRef(0);
+    const textArea = useRef(null);
     const currentDate = new Date();
     const date = currentDate.toISOString().toLocaleString('zh-TW');
     const logo = ':)';
@@ -149,6 +150,11 @@ function Chat() {
             setResponse(curr => [...curr, { question, answer }]);
         }
     }, [answer])
+
+    useEffect(() => {
+        textArea.current.style.height = "auto";
+        textArea.current.style.height = textArea.current.scrollHeight + 'px';
+    }, [question])
     
     return <>
         {settings || sidebar ? <Cover /> : null}
@@ -162,17 +168,18 @@ function Chat() {
                     <div className='h-5/6 w-full overflow-auto my-8'>
                         {response.length > 0 || loading ? <InfiniteScroll dataLength={response.length} className='w-full xl:px-44'>
                             {!response || response.length === 0 && isQuestion === false ? null : response.map(res => <Response answer={res.answer} question={res.question} userId={user.id} />)}
-                            {loading ? <div className='mb-4'> <PulseLoader loading={loading} color={'#000000'} size={10} aria-label="Loading Spinner" data-testid="loader" /> </div> : null}
-                        </InfiniteScroll> : <div className=' w-full h-full text-center flex flex-col justify-center items-center'> 
+                            {loading ? <div className='mb-4 w-full h-full text-center flex flex-col justify-center items-center'> <PulseLoader loading={loading} color={'#000000'} size={10} aria-label="Loading Spinner" data-testid="loader" /> </div> : null}
+                        </InfiniteScroll> : <div className='w-full h-full text-center flex flex-col justify-center items-center'> 
                                 <div className='text-4xl font-bold'> {logo} SSays </div>
                                 <div className='mt-4'>How can I help you today ?</div>
                         </div>}   
                     </div>       
-                    <div className='w-3/4 h-24 text-center flex flex-col items-center justify-center fixed bottom-0 bg-white'>
+                    <div className='w-full h-12 sm:h-24 text-center flex flex-col items-center justify-center p-16 fixed bottom-0 bg-white relative'>
                         <form onSubmit={handleSubmit} className='w-full sm:w-2/4 text-center flex items-center justify-center'>
-                            <div className='flex flex-row border-solid rounded-full w-5/6 justify-between pr-2 bg-gray-100 p-1.5'>
-                                <input type='text' className='h-8 w-3/4 rounded-full bg-inherit border-transparent focus:border-transparent focus:ring-0' onChange={handleChange} value={question}></input>
-                                <button className={`py-px px-2 rounded-full ${question.length > 0 ? 'bg-gray-500' : 'bg-gray-300'} duration-200`}>
+                            <div className='flex flex-row border-solid rounded-full w-5/6 justify-between items-center pr-2 bg-gray-100 p-1.5 absolute'>
+                                <textarea className={`h-8 w-3/4 rounded-full bg-inherit border-transparent focus:border-transparent focus:ring-0 resize-none overflow-hidden box-border`} rows="1" onChange={handleChange} value={question} ref={textArea} placeholder='Ask SSays'>
+                                </textarea>
+                                <button className={`py-px px-2 rounded-full ${question.length > 0 ? 'bg-gray-500' : 'bg-gray-300'} duration-200 h-10 w-10 flex items-center justify-center`}>
                                     <svg
                                         width="18"
                                         height="18"

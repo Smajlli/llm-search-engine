@@ -25,6 +25,7 @@ function Chat({params}) {
     const [sidebar, setSidebar] = useState(false);
     const data = new FormData();
     const responseCounter = useRef(0);
+    const textArea = useRef(null);
 
     useEffect(() => {
         async function getSession() {
@@ -114,6 +115,11 @@ function Chat({params}) {
         setSidebar(!sidebar);
     }
 
+    useEffect(() => {
+        textArea.current.style.height = "auto";
+        textArea.current.style.height = textArea.current.scrollHeight + 'px';
+    }, [question])
+
     return <>
         {settings || sidebar ? <Cover /> : null}
         {sidebar ? <Sidebar profileId={user.id} handleSettings={handleSettings} handleSidebar={handleSidebar} /> : null}
@@ -130,11 +136,12 @@ function Chat({params}) {
                             {loading ? <div className='mb-4'> <PulseLoader loading={loading} color={'#000000'} size={10} aria-label="Loading Spinner" data-testid="loader" /> </div> : null}
                         </InfiniteScroll> 
                     </div>   
-                    <div className='w-3/4 h-12 sm:h-24 text-center flex flex-col items-center justify-center fixed bottom-0 bg-white'>
-                        <form onSubmit={handleSubmit} className='w-full flex justify-center items-center text-center sm:w-2/4'>
-                            <div className='flex flex-row border-solid rounded-full w-5/6 justify-between pr-2 bg-gray-100 p-1.5'>
-                                <input type='text' className='h-8 border-none w-3/4 rounded-full bg-inherit' onChange={handleChange}></input>
-                                <button className={`py-px px-2 rounded-full ${question.length > 0 ? 'bg-gray-500' : 'bg-gray-300'} duration-200`}>
+                    <div className='w-full h-12 sm:h-24 text-center flex flex-col items-center justify-center p-16 fixed bottom-0 bg-white relative z-20'>
+                        <form onSubmit={handleSubmit} className='w-full sm:w-2/4 text-center flex items-center justify-center'>
+                            <div className='flex flex-row border-solid rounded-full w-5/6 justify-between items-center pr-2 bg-gray-100 p-1.5 absolute'>
+                                <textarea className={`h-8 w-3/4 rounded-full bg-inherit border-transparent focus:border-transparent focus:ring-0 resize-none overflow-hidden box-border`} rows="1" onChange={handleChange} value={question} ref={textArea} placeholder='Ask SSays'>
+                                </textarea>
+                                <button className={`py-px px-2 rounded-full ${question.length > 0 ? 'bg-gray-500' : 'bg-gray-300'} duration-200 h-10 w-10 flex items-center justify-center`}>
                                     <svg
                                         width="18"
                                         height="18"
@@ -151,9 +158,8 @@ function Chat({params}) {
                                 </button>
                             </div>
                         </form>
-                    </div> 
-                </div>
-                
+                    </div>
+                </div>  
             </div>
         </div>
     </>
