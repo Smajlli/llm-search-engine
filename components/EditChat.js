@@ -16,7 +16,7 @@ function EditChat({id, handleEdit}) {
     }
 
     return <div className='block hover:cursor-pointer'>
-        <div onClick={handleDelete} className='flex flex-row items-center text-red-500 text-xs hover:bg-slate-200 hover:rounded-lg p-2'>
+        <div onClick={handleDelete} className='flex flex-row items-center text-red-500 text-xs hover:bg-slate-200 dark:hover:bg-slate-700 hover:rounded-lg p-2'>
             <div className='mr-2'>
                 <svg
                     width="22"
