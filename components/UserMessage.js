@@ -20,11 +20,11 @@ function UserMessage({question, userId}) {
         return null
     } else {
         return <div>
-            <div className='flex flex-row'>
+            <div className='flex flex-row dark:text-white'>
                 <Image src={user[0].profile_image} width={20} height={20} className='mr-2' />
-                <div className='font-bold'> You </div>
+                <div className='font-bold dark:text-white'> You </div>
             </div>
-            <div className='mb-6'>{question}</div>
+            <div className='mb-6 dark:text-white'>{question}</div>
         </div>
     }
 }
