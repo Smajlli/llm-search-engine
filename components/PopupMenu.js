@@ -31,16 +31,16 @@ function PopupMenu({ id, hanldeModal }) {
     if(!profile || profile.length === 0) {
         return null
     } else {
-        return <div className='p-4 flex flex-col w-72 h-36 border-solid border-2 rounded-lg drop-shadow-md absolute bottom-16 bg-white divide-y divide-slate-200'>
-            <div className='text-sm py-2 px-4 text-slate-500'> {profile[0].email} </div>
-            <div className='flex flex-row py-2 text-sm hover:bg-slate-100 rounded-lg hover:cursor-pointer duration-200 px-4'>
+        return <div className='p-4 flex flex-col w-72 h-36 border-solid border-2 rounded-lg drop-shadow-md absolute bottom-16 bg-white divide-y divide-slate-200 dark:divide-slate-800 dark:bg-slate-700 dark:border-none'>
+            <div className='text-sm py-2 px-4 text-slate-500 dark:text-slate-300'> {profile[0].email} </div>
+            <div className='flex flex-row py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-600 rounded-lg hover:cursor-pointer duration-200 px-4'>
                 <svg
                     width="22"
                     height="22"
                     viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                    className='text-slate-700 mr-2'
+                    className='text-slate-700 mr-2 dark:text-white'
                 >
                     <path
                         fillRule="evenodd"
@@ -55,16 +55,16 @@ function PopupMenu({ id, hanldeModal }) {
                         fill="currentColor"
                     />
                 </svg>
-                <div onClick={handleSettingsModal}> Settings </div>
+                <div onClick={handleSettingsModal} className='dark:text-white'> Settings </div>
             </div>
-            <div className='text-sm py-2 flex flex-row hover:bg-slate-100 rounded-lg hover:cursor-pointer duration-200 px-4'>
+            <div className='text-sm py-2 flex flex-row hover:bg-slate-100 dark:hover:bg-slate-600 rounded-lg hover:cursor-pointer duration-200 px-4'>
                 <svg
                     width="22"
                     height="22"
                     viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                    className='text-slate-700 mr-2'
+                    className='text-slate-700 mr-2 dark:text-white'
                 >
                     <path
                         d="M8.51428 20H4.51428C3.40971 20 2.51428 19.1046 2.51428 18V6C2.51428 4.89543 3.40971 4 4.51428 4H8.51428V6H4.51428V18H8.51428V20Z"
@@ -75,7 +75,7 @@ function PopupMenu({ id, hanldeModal }) {
                         fill="currentColor"
                     />
                 </svg>
-                <div onClick={handleLogout}>Log out</div>
+                <div onClick={handleLogout} className='dark:text-white'>Log out</div>
             </div>
         </div>
     }
