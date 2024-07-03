@@ -9,7 +9,7 @@ function Navbar({handleSidebar}) {
 
     const logo = ':)';
 
-    return <div className='w-full h-10 flex flex-row justify-between items-center px-4 block sm:hidden'>
+    return <div className='w-full h-10 flex flex-row justify-between items-center px-4 block sm:hidden dark:bg-slate-800'>
         <div className='text-slate-500 cursor-pointer' onClick={sidebarOpenClose}>
             <svg
                 width="20"
