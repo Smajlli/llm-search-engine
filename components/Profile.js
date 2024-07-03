@@ -22,9 +22,9 @@ function Profile({id}) {
         return null
     } else {
         return <>
-            <div className=' flex flex-row items-center w-72 p-2 bottom-0 absolute overflow-hidden bg-slate-50 hover:cursor-pointer hover:bg-slate-200 duration-200 border rounded-xl border-none'>
+            <div className='flex flex-row items-center w-72 p-2 bottom-0 absolute overflow-hidden bg-slate-50 hover:cursor-pointer hover:bg-slate-200 duration-200 border rounded-xl border-none dark:bg-slate-800 dark:hover:bg-slate-700'>
                 <Image className='mr-4' src={profile[0].profile_image} width={35} height={35} />
-                <div> {profile[0].full_name} </div>
+                <div className='dark:text-white'> {profile[0].full_name} </div>
             </div>
         </>
         
