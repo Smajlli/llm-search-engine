@@ -14,16 +14,16 @@ function Question({text, convoId}) {
     }
 
     return <>
-        <div className=' group mb-2 py-4 px-2 w-72 h-12 text-xs hover:cursor-pointer hover:bg-slate-200 hover:py-4 duration-200 border rounded-xl border-none flex flex-row items-center justify-between'>
-            <div className='inline-block'> <Link href={`/chat/${convoId}`}> {text} </Link> </div>
-            <div onClick={handleEdit} className='hidden group-hover:inline-block'>
+        <div className='group mb-2 py-4 px-2 w-72  h-12 text-xs hover:cursor-pointer hover:bg-slate-200 hover:py-4 duration-200 border rounded-xl border-none flex flex-row items-center justify-between bg-gradient-to-r from-slate-100 dark:from-slate-800 dark:hover:bg-slate-600'>
+            <div className='inline-block whitespace-nowrap overflow-hidden'> <Link href={`/chat/${convoId}`} className='dark:text-white'> {text} </Link> </div>
+            <div onClick={handleEdit} className='group-hover:inline-block dark:text-white'>
                 <svg
                     width="24"
                     height="24"
                     viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                    className='hover:text-slate-600'
+                    className='hover:text-slate-600 dark:text-white'
                 >
                     <path
                         d="M8 12C8 13.1046 7.10457 14 6 14C4.89543 14 4 13.1046 4 12C4 10.8954 4.89543 10 6 10C7.10457 10 8 10.8954 8 12Z"
