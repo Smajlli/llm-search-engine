@@ -17,7 +17,7 @@ import Link from 'next/link';
 import ChatOptions from '@/components/ChatOptions';
 
 function Chat() {
-    const [answer, setAnswer] = useState('');
+    const [answer, setAnswer] = useState([]);
     const [question, setQuestion] = useState('');
     const [response, setResponse] = useState([]);
     const [user, setUser] = useState();
@@ -29,6 +29,7 @@ function Chat() {
     const [sidebar, setSidebar] = useState(false);
     const [chatHistory, setChatHistory] = useState(true);
     const [darkMode, setDarkMode] = useState(false);
+    const [searchResponse, setSearchResponse] = useState();
     const data = new FormData();
     const renderCount = useRef(0);
     const responseCounter = useRef(0);
@@ -64,6 +65,7 @@ function Chat() {
                 const {data, error} = await supabase.from('dialogs').insert({
                     question: response[responseCounter.current].question,
                     answer: response[responseCounter.current].answer,
+                    links: response[responseCounter.current].links,
                     conversation_id: convoId 
                 })
                 if(error) {
@@ -119,7 +121,7 @@ function Chat() {
                 method: 'POST',
                 url: '/api/chat',
                 data: data
-            }).then(res => setAnswer(res.data))
+            }).then(res => setAnswer({answer: res.data[0].answer, links: res.data[0].links}))
             
         } catch(err) {
             console.log(err)
@@ -158,8 +160,8 @@ function Chat() {
     }
 
     useEffect(() => {
-        if (answer && question) {
-            setResponse(curr => [...curr, { question, answer }]);
+        if (answer  && question) {
+            setResponse(curr => [...curr, { question, answer: answer.answer, links: answer.links }]);
         }
     }, [answer])
 
@@ -180,7 +182,7 @@ function Chat() {
                     <div className='w-full h-full overflow-auto flex flex-col justify-center'>
                         <div className='h-5/6 w-full overflow-auto my-8'>
                             {response.length > 0 || loading ? <InfiniteScroll dataLength={response.length} className='w-full xl:px-44'>
-                                {!response || response.length === 0 && isQuestion === false ? null : response.map(res => <Response answer={res.answer} question={res.question} userId={user.id} />)}
+                                {!response || response.length === 0 && isQuestion === false ? null : response.map(res => <Response answer={res.answer} question={res.question} sources={res.links} userId={user.id} />)}
                                 {loading ? <div className='mb-4 w-full h-full text-center flex flex-col justify-center items-center'> <PulseLoader loading={loading} color={'#000000'} size={10} aria-label="Loading Spinner" data-testid="loader" /> </div> : null}
                             </InfiniteScroll> : <div className='w-full h-full text-center flex flex-col justify-center items-center'>
                                 <div className='text-4xl font-bold dark:text-white'> {logo} SSays </div>
