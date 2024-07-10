@@ -5,13 +5,13 @@ import '@/app/globals.css'
 import { useState } from 'react';
 import { supabase } from '@/utils/supabase/supabase';
 import { useRouter } from 'next/navigation';
+import Logo from '@/components/Logo';
 import Link from 'next/link';
 
 function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const router = useRouter();
-    const logo = ':)';
 
     const handleEmail = (e) => {
         setEmail(e.target.value)
@@ -36,12 +36,15 @@ function Login() {
 
     return <div className='h-screen flex h-full w-full flex flex-col sm:flex-row dark:bg-slate-900'>
             <div className=' justify-center flex-col items-center bg-slate-100 h-full w-full hidden sm:flex dark:bg-slate-800 dark:text-white'>
-                <div className='text-6xl font-bold'>{logo} SSays</div>
+                <div className='text-6xl font-bold flex flex-row items-center'>
+                    <Logo/>
+                    <div>SSays</div>
+                </div>
                 <div className='mt-6'>Large Language Model App</div>
                 <div className='font-thin'>powered by Amer Smajlovic</div>
             </div>
             <div className="flex justify-center flex-col items-center bg-slate-100 h-1/5 w-full sm:hidden dark:bg-slate-800 dark:text-white">
-                <div className='text-4xl font-bold'>{logo} SSays</div>
+                <div className='text-4xl font-bold'>SSays</div>
                 <div className='mt-6 text-xs'>Large Language Model App</div>
                 <div className='font-thin text-xs'>powered by Amer Smajlovic</div>
             </div>

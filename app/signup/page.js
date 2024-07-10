@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { supabase } from '@/utils/supabase/supabase';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Logo from '@/components/Logo';
 
 function Signup() {
     const [email, setEmail] = useState('');
@@ -48,7 +49,7 @@ function Signup() {
 
     return <div className='h-screen flex w-full h-full flex flex-col sm:flex-row dark:bg-slate-900'>
         <div className='flex justify-center flex-col items-center bg-slate-100 h-full w-full hidden sm:flex dark:bg-slate-800 dark:text-white'>
-            <div className='text-6xl font-bold'>{logo} SSays</div>
+            <div className='flex flex-row items-center'><Logo /> <div className='text-6xl font-bold'>SSays</div></div>
             <div className='mt-6'>Large Laguange Model App</div>
             <div className='font-thin'>powered by Amer Smajlovic</div>
         </div>
