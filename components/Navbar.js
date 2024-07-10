@@ -1,13 +1,12 @@
 import '@/app/globals.css'
 import Link from 'next/link';
+import Logo from './Logo';
 
 function Navbar({handleSidebar}) {
 
     const sidebarOpenClose = () => {
         handleSidebar();
     }
-
-    const logo = ':)';
 
     return <div className='w-full h-10 flex flex-row justify-between items-center px-4 block sm:hidden dark:bg-slate-800'>
         <div className='text-slate-500 cursor-pointer' onClick={sidebarOpenClose}>
@@ -32,7 +31,7 @@ function Navbar({handleSidebar}) {
                 />
             </svg>
         </div>
-        <div className='text-slate-500 font-bold'>{logo}</div>
+        <Logo width={50} height={50}/>
         <Link href={'/chat'} className='text-slate-500 cursor-pointer'>
             <svg
                 width="20"
