@@ -25,10 +25,17 @@ function Chat({params}) {
     const [settings, setSettings] = useState(false);
     const [sidebar, setSidebar] = useState(false);
     const [chatHistory, setChatHistory] = useState(true);
-    const [darkMode, setDarkMode] = useState(false);
+    const [darkMode, setDarkMode] = useState(() => {
+        const saved = localStorage.getItem('darkMode');
+        return saved !== null ? JSON.parse(saved) : false;
+    });
     const data = new FormData();
     const responseCounter = useRef(0);
     const textArea = useRef(null);
+
+    useEffect(() => {
+        localStorage.setItem('darkMode', JSON.stringify(darkMode));
+    }, [darkMode])
 
     useEffect(() => {
         async function getSession() {
@@ -143,7 +150,7 @@ function Chat({params}) {
                     <div className='w-full h-full overflow-auto px-2 flex flex-col'>
                         <div className='h-5/6 w-full overflow-auto my-8'>
                             <InfiniteScroll dataLength={response.length} className='w-full xl:px-44'>
-                                {conversation.map(convo => <Response answer={convo.answer} question={convo.question} userId={user.id} />)}
+                                {conversation.map(convo => <Response answer={convo.answer} question={convo.question} sources={convo.links} userId={user.id} />)}
                                 {!response || response.length === 0 && isQuestion === false ? null : response.map(res => <Response answer={res.answer} question={res.question} userId={user.id} />)}
                                 {loading ? <div className='mb-4'> <PulseLoader loading={loading} color={'#000000'} size={10} aria-label="Loading Spinner" data-testid="loader" /> </div> : null}
                             </InfiniteScroll>
