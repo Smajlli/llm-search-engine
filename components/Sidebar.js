@@ -1,17 +1,28 @@
 'use client'
 
 import '@/app/globals.css'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/utils/supabase/supabase';
 import Profile from './Profile';
 import PopupMenu from './PopupMenu';
 import Question from './Question';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Link from 'next/link';
+import QuestionsContainer from './QuestionsContainer';
 
 function Sidebar({profileId, handleSettings, handleSidebar}) {
     const [profileHistory, setProfileHistory] = useState([]);
     const [popup, setPopup] = useState(false);
+    const [todayQuestions, setTodayQuestions] = useState([]);
+    const [lastWeekDates, setLastWeek] = useState([]);
+    const [lastWeekQuestions, setLastWeekQuestions] = useState([]);
+    const [olderQuestions, setOlderQestions] = useState([]);
+    const date = new Date();
+    const today = date.getFullYear() + '-'
+        + 0 + (date.getMonth() + 1) + '-'
+        + '0' + date.getDate();
+    const renderCount = useRef(0);
+    const dateCount = useRef(0)
 
     useEffect(() => {
         async function getHistory() {
@@ -20,6 +31,33 @@ function Sidebar({profileId, handleSettings, handleSidebar}) {
         }
         getHistory();
     }, [])
+
+    useEffect(() => {
+        for (let i = 1; i < 7; i++) {
+            const thisDay = new Date();
+            const day = new Date();
+            day.setDate(thisDay.getDate() - i);
+            const stringDate = day.toISOString().split('T')[0];
+            setLastWeek(curr => [...curr, stringDate]);
+        }
+    }, [])
+
+    useEffect(() => {
+        if (renderCount.current === 2) {
+            if (profileHistory && lastWeekDates) {
+                profileHistory.map((q) => {
+                    if (q.created_at === today) {
+                        setTodayQuestions(curr => [...curr, q]);
+                    } else if (lastWeekDates.includes(q.created_at)) {
+                        setLastWeekQuestions(curr => [...curr, q]);
+                    } else {
+                        setOlderQestions(curr => [...curr, q]);
+                    }
+                })
+            }
+        }
+        renderCount.current = renderCount.current + 1;
+    }, [profileHistory])
 
     const handlePopup = () => {
         setPopup(!popup);
@@ -75,11 +113,9 @@ function Sidebar({profileId, handleSettings, handleSidebar}) {
                 <div className='h-full flex flex-col justify-between mt-4'>
                     <div className='h-4/6 overflow-auto relative'>
                         <InfiniteScroll dataLength={profileHistory.length}>
-                            {profileHistory.map((history) => {
-                                if (profileId === history.profile_id) {
-                                    return <Question text={history.title} convoId={history.id} />
-                                }
-                            })}
+                            {todayQuestions.length >= 1 ? <QuestionsContainer questions={todayQuestions} text={'Today'} /> : null}
+                            {lastWeekQuestions.length > 0 ? <QuestionsContainer questions={lastWeekQuestions} text={'Last Week'} /> : null}
+                            {olderQuestions.length > 0 ? <QuestionsContainer questions={olderQuestions} text={'Older'} /> : null}
                         </InfiniteScroll>
                     </div>
                     <div className='w-72 bg-slate-200 z-10' onClick={handlePopup}>
