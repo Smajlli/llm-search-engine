@@ -13,8 +13,8 @@ import Settings from '@/components/Settings';
 import Cover from '@/components/Cover';
 import Navbar from '@/components/Navbar';
 import Sidebar from '@/components/Sidebar';
-import Link from 'next/link';
 import ChatOptions from '@/components/ChatOptions';
+import Logo from '@/components/Logo';
 
 function Chat() {
     const [answer, setAnswer] = useState([]);
@@ -28,15 +28,20 @@ function Chat() {
     const [settings, setSettings] = useState(false);
     const [sidebar, setSidebar] = useState(false);
     const [chatHistory, setChatHistory] = useState(true);
-    const [darkMode, setDarkMode] = useState(false);
-    const [searchResponse, setSearchResponse] = useState();
+    const [darkMode, setDarkMode] = useState(() => {
+        const saved = localStorage.getItem('darkMode');
+        return saved !== null ? JSON.parse(saved) : false;
+    });
     const data = new FormData();
     const renderCount = useRef(0);
     const responseCounter = useRef(0);
     const textArea = useRef(null);
     const currentDate = new Date();
     const date = currentDate.toISOString().toLocaleString('zh-TW');
-    const logo = ':)';
+
+    useEffect(() => {
+        localStorage.setItem('darkMode', JSON.stringify(darkMode));
+    }, [darkMode])
 
     useEffect(() => {
          async function getSession() {
@@ -185,7 +190,7 @@ function Chat() {
                                 {!response || response.length === 0 && isQuestion === false ? null : response.map(res => <Response answer={res.answer} question={res.question} sources={res.links} userId={user.id} />)}
                                 {loading ? <div className='mb-4 w-full h-full text-center flex flex-col justify-center items-center'> <PulseLoader loading={loading} color={'#000000'} size={10} aria-label="Loading Spinner" data-testid="loader" /> </div> : null}
                             </InfiniteScroll> : <div className='w-full h-full text-center flex flex-col justify-center items-center'>
-                                <div className='text-4xl font-bold dark:text-white'> {logo} SSays </div>
+                                    <div className='flex flex-row items-center'> <Logo width={170} height={170}/></div>
                                 <div className='mt-4 dark:text-white'>How can I help you today ?</div>
                             </div>}
                         </div>
