@@ -7,7 +7,8 @@ import { supabase } from '@/utils/supabase/supabase';
 import Image from 'next/image';
 import avatar from '@/public/Avatar1.svg'
 import axios from 'axios';
-import PulseLoader from 'react-spinners/PulseLoader'
+import PulseLoader from 'react-spinners/PulseLoader';
+import Switcher from './Switcher';
 
 function Settings({profile, handleSettings, mode}) {
     const [avatarImg, setAvatarImg] = useState('');
@@ -97,7 +98,12 @@ function Settings({profile, handleSettings, mode}) {
                         {user ? <div className='text-xs sm:text-md text-slate-500 flex items-center p-2 dark:text-slate-300'>Full Name: {user[0].full_name}</div> : null}
                         {user ? <div className=' text-xs md:text-md text-slate-500 flex items-center p-2 dark:text-slate-300'>Username: {user[0].username} </div> : null}
                         <div className=' text-xs md:text-md flex-items-center p-2 dark:text-slate-300'>Language: English</div>
-                        <button onClick={changeMode} className='text-xs sm:text-md p-2 hover:cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-600 duration-200 border rounded-xl border-none bg-gradient-to-r from-slate-100 dark:from-slate-600 dark:text-white mt-4'> Change mode </button>
+                        <div className='w-full p-2'>
+                            <div className='flex flex-row items-center w-2/6 justify-between'>
+                                <div className='text-xs dark:text-white'>Theme: </div>
+                                <Switcher />
+                            </div>
+                        </div>
                     </div>
                     <div className='text-xs sm:text-md flex flex-row justify-between items-center w-full'>
                         <div className='dark:text-slate-300'>Delete all chats</div>
