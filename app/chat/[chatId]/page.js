@@ -25,17 +25,9 @@ function Chat({params}) {
     const [settings, setSettings] = useState(false);
     const [sidebar, setSidebar] = useState(false);
     const [chatHistory, setChatHistory] = useState(true);
-    const [darkMode, setDarkMode] = useState(() => {
-        const saved = localStorage.getItem('darkMode');
-        return saved !== null ? JSON.parse(saved) : false;
-    });
     const data = new FormData();
     const responseCounter = useRef(0);
     const textArea = useRef(null);
-
-    useEffect(() => {
-        localStorage.setItem('darkMode', JSON.stringify(darkMode));
-    }, [darkMode])
 
     useEffect(() => {
         async function getSession() {
@@ -140,7 +132,7 @@ function Chat({params}) {
 
     return <>
         {settings || sidebar ? <Cover /> : null}
-        <div className={`w-full h-full ${darkMode && 'dark'}`}>
+        <div className={`w-full h-full`}>
             {sidebar ? <Sidebar profileId={user.id} handleSettings={handleSettings} handleSidebar={handleSidebar} /> : null}
             <Navbar handleSidebar={handleSidebar} />
             <div className='h-full w-full overflow-hidden flex items-center justify-center dark:bg-slate-900'>
