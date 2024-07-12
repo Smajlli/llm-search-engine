@@ -9,12 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^2.1.1",
     "@supabase/auth-helpers-nextjs": "^0.9.0",
     "@supabase/ssr": "^0.1.0",
     "@supabase/supabase-js": "^2.41.1",
     "axios": "^1.6.8",
     "groq-sdk": "^0.5.0",
+    "html-to-text": "^9.0.5",
     "next": "14.1.4",
+    "next-themes": "^0.3.0",
     "react": "^18",
     "react-infinite-scroll-component": "^6.1.0",
     "react-spinners": "^0.13.8",
