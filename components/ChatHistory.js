@@ -8,10 +8,9 @@ import PopupMenu from './PopupMenu';
 import QuestionsContainer from './QuestionsContainer';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Link from 'next/link';
-import { Transition } from '@headlessui/react';
 
 
-function ChatHistory({profileId, handleSettings, toggle, mode}) {
+function ChatHistory({profileId, handleSettings, toggle}) {
     const [conversations, setConversations] = useState([]);
     const [todayQuestions, setTodayQuestions] = useState([]);
     const [lastWeekDates, setLastWeek] = useState([]);
@@ -19,11 +18,24 @@ function ChatHistory({profileId, handleSettings, toggle, mode}) {
     const [olderQuestions, setOlderQestions] = useState([]);
     const [popup, setPopup] = useState(false);
     const date = new Date();
-    const today = date.getFullYear() + '-'
-        + 0 + (date.getMonth() + 1) + '-'
-        + '0' + date.getDate();
+    let today = '';
     const renderCount = useRef(0);
-    const dateCount = useRef(0)
+
+    const getToday = () => {
+        let month = '' + (date.getMonth() + 1);
+        let day = '' + date.getDate();
+        let year = date.getFullYear();
+
+        if(month.length < 2)
+            month = '0' + month;
+        if(day.length < 2)
+            day = '0' + day;
+
+        return today = [year, month, day].join('-');
+    }
+
+    getToday();
+
     useEffect(() => {
         async function getConversations() {
             const { data } = await supabase.from('conversations').select('*').eq('profile_id', profileId)
@@ -31,6 +43,7 @@ function ChatHistory({profileId, handleSettings, toggle, mode}) {
         }
         getConversations();
     }, [])
+
 
     useEffect(() => {
         for (let i = 1; i < 7; i++) {
