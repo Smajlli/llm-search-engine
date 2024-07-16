@@ -52,23 +52,12 @@ export async function POST(req) {
         console.log(err)
     }
 
-    /* async function chat() {
-        return groq.chat.completions.create({
-            messages: chatHistory,
-            model: "llama3-8b-8192",
-            temperature: 0.5,
-            max_tokens: 1024,
-            stop: null,
-            stream: false,
-        });
-    }; */
-
     async function chat() {
         return groq.chat.completions.create({
             messages: [
                 {
                     role: 'user',
-                    content: `I will give you content of different web pages. Can you write me summary of the content focusing only on the main content of given pages and avoiding all brackets, just plain content: ${allContent}`
+                    content: `${allContent}, summarize.`
                 }
             ],
             model: "llama3-8b-8192",
