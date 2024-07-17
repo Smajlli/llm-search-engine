@@ -18,15 +18,27 @@ function Sidebar({profileId, handleSettings, handleSidebar}) {
     const [lastWeekQuestions, setLastWeekQuestions] = useState([]);
     const [olderQuestions, setOlderQestions] = useState([]);
     const date = new Date();
-    const today = date.getFullYear() + '-'
-        + 0 + (date.getMonth() + 1) + '-'
-        + '0' + date.getDate();
+    let today = '';
     const renderCount = useRef(0);
-    const dateCount = useRef(0)
+
+    const getToday = () => {
+        let month = '' + (date.getMonth() + 1);
+        let day = '' + date.getDate();
+        let year = date.getFullYear();
+
+        if (month.length < 2)
+            month = '0' + month;
+        if (day.length < 2)
+            day = '0' + day;
+
+        return today = [year, month, day].join('-');
+    }
+
+    getToday();
 
     useEffect(() => {
         async function getHistory() {
-            const { data } = await supabase.from('conversations').select('*')
+            const { data } = await supabase.from('conversations').select('*').eq('profile_id', profileId)
             setProfileHistory(data)
         }
         getHistory();
