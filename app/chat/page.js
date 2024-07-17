@@ -28,6 +28,8 @@ function Chat() {
     const [settings, setSettings] = useState(false);
     const [sidebar, setSidebar] = useState(false);
     const [chatHistory, setChatHistory] = useState(true);
+    const [seed, setSeed] = useState();
+    const [latestConvo, setLatestConvo] = useState();
     const data = new FormData();
     const renderCount = useRef(0);
     const responseCounter = useRef(0);
@@ -81,10 +83,11 @@ function Chat() {
                 if(data.length > 0) {
                     if (data[0].title === "New Conversation" && responseCounter.current === 1) {
                         if (convoTitle) {
-                            await supabase.from('conversations').update({
+                            const {data} = await supabase.from('conversations').update({
                                 title: convoTitle,
                                 profile_id: user.id
-                            }).eq('id', convoId);
+                            }).eq('id', convoId).select('*');
+                            setLatestConvo(data);
                         }
                         if (error) {
                             console.log(error);
@@ -94,8 +97,6 @@ function Chat() {
             }
 
             selectAndUpdateConvo();   
-        } else {
-            console.log('CANNOT UPDATE :/')
         }
     }, [convoTitle])
 
@@ -137,6 +138,11 @@ function Chat() {
         setIsQuestion(!isQuestion);
         setLoading(false);
         setQuestion('');
+        handleRefresh();
+    }
+
+    const handleRefresh = () => {
+        setSeed(Math.random());
     }
 
     const handleSettings = () => {
@@ -174,7 +180,7 @@ function Chat() {
             <Navbar handleSidebar={handleSidebar} />
             <div className='h-dvh sm:h-full w-full overflow-hidden flex items-center justify-center dark:bg-slate-900'>
                 {settings ? <Settings profile={user} handleSettings={handleSettings} mode={handleDarkMode} /> : null}
-                {user && chatHistory ? <ChatHistory profileId={user.id} handleSettings={handleSettings} today={date} toggle={handleChatHistory}/> : <ChatOptions chatHistory={handleChatHistory}/>}
+                {user && chatHistory ? <ChatHistory profileId={user.id} handleSettings={handleSettings} today={date} toggle={handleChatHistory} refresh={seed} latestConvo={latestConvo}/> : <ChatOptions chatHistory={handleChatHistory}/>}
                 <div className='w-full h-full flex flex-col justify-between'>
                     <div className='w-full h-full overflow-auto flex flex-col justify-center'>
                         <div className='h-5/6 w-full overflow-auto my-8'>
