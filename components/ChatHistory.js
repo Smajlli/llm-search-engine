@@ -10,7 +10,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import Link from 'next/link';
 
 
-function ChatHistory({profileId, handleSettings, toggle}) {
+function ChatHistory({profileId, handleSettings, toggle, refresh, latestConvo}) {
     const [conversations, setConversations] = useState([]);
     const [todayQuestions, setTodayQuestions] = useState([]);
     const [lastWeekDates, setLastWeek] = useState([]);
@@ -42,7 +42,13 @@ function ChatHistory({profileId, handleSettings, toggle}) {
             setConversations(data);
         }
         getConversations();
-    }, [])
+    }, [refresh])
+
+    useEffect(() => {
+        if(renderCount.current > 2) {
+            setConversations(curr => [...curr, latestConvo[0]]);
+        }
+    }, [latestConvo])
 
 
     useEffect(() => {
@@ -68,6 +74,12 @@ function ChatHistory({profileId, handleSettings, toggle}) {
                    }
                })
            }
+        }else if(renderCount.current > 4) {
+            if (conversations && lastWeekDates) {
+                    if (conversations[conversations.length - 1].created_at === today) {
+                        setTodayQuestions(curr => [...curr, conversations[conversations.length - 1]]);
+                    }
+            }
         }
         renderCount.current = renderCount.current + 1;
     }, [conversations])
