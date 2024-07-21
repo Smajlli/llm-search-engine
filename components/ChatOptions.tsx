@@ -1,10 +1,10 @@
 import '@/app/globals.css'
 import Link from 'next/link';
 
-function ChatOptions({chatHistory}) {
+function ChatOptions(props : {chatHistory}) {
 
     const handleChatHistory = () => {
-        chatHistory();
+        props.chatHistory();
     }
 
     return <div className='hidden sm:flex items-start w-auto h-full p-4'>

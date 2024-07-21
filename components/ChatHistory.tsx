@@ -8,18 +8,19 @@ import PopupMenu from './PopupMenu';
 import QuestionsContainer from './QuestionsContainer';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Link from 'next/link';
+import { Conversations } from '@/types/types';
+import PulseLoader from 'react-spinners/PulseLoader'
 
-
-function ChatHistory({profileId, handleSettings, toggle, refresh, latestConvo}) {
-    const [conversations, setConversations] = useState([]);
-    const [todayQuestions, setTodayQuestions] = useState([]);
-    const [lastWeekDates, setLastWeek] = useState([]);
-    const [lastWeekQuestions, setLastWeekQuestions] = useState([]);
-    const [olderQuestions, setOlderQestions] = useState([]);
-    const [popup, setPopup] = useState(false);
+function ChatHistory(props: {profileId?: string, handleSettings?, toggle?, refresh?, latestConvo? : Conversations }) {
+    const [conversations, setConversations] = useState<Conversations[]>([]);
+    const [todayQuestions, setTodayQuestions] = useState<Conversations[]>([]);
+    const [lastWeek, setLastWeek] = useState<string[]>([]);
+    const [lastWeekQuestions, setLastWeekQuestions] = useState<Conversations[]>([]);
+    const [olderQuestions, setOlderQestions] = useState<Conversations[]>([]);
+    const [popup, setPopup] = useState<boolean>(false);
     const date = new Date();
-    let today = '';
-    const renderCount = useRef(0);
+    let today: string = '';
+    const renderCount = useRef<number>(0);
 
     const getToday = () => {
         let month = '' + (date.getMonth() + 1);
@@ -38,17 +39,17 @@ function ChatHistory({profileId, handleSettings, toggle, refresh, latestConvo}) 
 
     useEffect(() => {
         async function getConversations() {
-            const { data } = await supabase.from('conversations').select('*').eq('profile_id', profileId)
+            const { data } = await supabase.from('conversations').select('*').eq('profile_id', props.profileId)
             setConversations(data);
         }
         getConversations();
-    }, [refresh])
+    }, [props.refresh])
 
     useEffect(() => {
         if(renderCount.current > 2) {
-            setConversations(curr => [...curr, latestConvo[0]]);
+            setConversations(curr => [...curr, props.latestConvo]);
         }
-    }, [latestConvo])
+    }, [props.latestConvo])
 
 
     useEffect(() => {
@@ -63,24 +64,24 @@ function ChatHistory({profileId, handleSettings, toggle, refresh, latestConvo}) 
 
     useEffect(() => {
         if(renderCount.current === 2) {
-           if(conversations && lastWeekDates) {
+           if(conversations && lastWeek) {
                conversations.map((q) => {
                    if (q.created_at === today) {
                        setTodayQuestions(curr => [...curr, q]);
-                   } else if(lastWeekDates.includes(q.created_at)) {
+                   } else if(lastWeek.includes(q.created_at)) {
                         setLastWeekQuestions(curr => [...curr, q]);
                    } else {
                        setOlderQestions(curr => [...curr, q]);
                    }
                })
            }
-        }else if(renderCount.current > 4) {
-            if (conversations && lastWeekDates) {
+        } else if(renderCount.current > 4) {
+            if (conversations && lastWeek) {
                     if (conversations[conversations.length - 1].created_at === today) {
                         setTodayQuestions(curr => [...curr, conversations[conversations.length - 1]]);
                     }
             }
-        }
+        } 
         renderCount.current = renderCount.current + 1;
     }, [conversations])
 
@@ -89,11 +90,11 @@ function ChatHistory({profileId, handleSettings, toggle, refresh, latestConvo}) 
     }
 
     const hanldeModal = () => {
-        handleSettings();
+        props.handleSettings();
     }
 
     const toggleChatHistory = () => {
-        toggle();
+        props.toggle();
     }
 
     if(!conversations || conversations.length === 0) {
@@ -140,8 +141,8 @@ function ChatHistory({profileId, handleSettings, toggle, refresh, latestConvo}) 
             </div>
             <div className='h-full flex flex-col justify-between mt-4 dark:bg-slate-800'>
                 <div className='w-72 bg-slate-200 z-10 dark:bg-slate-800' onClick={handlePopup}>
-                    {popup ? <PopupMenu id={profileId} hanldeModal={hanldeModal} /> : null}
-                    <Profile id={profileId} />
+                    {popup ? <PopupMenu id={props.profileId} hanldeModal={hanldeModal} /> : null}
+                    <Profile id={props.profileId} />
                 </div>
             </div>
         </div>
@@ -189,15 +190,15 @@ function ChatHistory({profileId, handleSettings, toggle, refresh, latestConvo}) 
             </div>
             <div className='h-full flex flex-col justify-between mt-4'>
                 <div className='h-4/6 overflow-auto relative'>
-                    <InfiniteScroll dataLength={conversations.length}>
-                        { todayQuestions.length >= 1 ? <QuestionsContainer questions={todayQuestions} text={'Today'} /> : null } 
-                        { lastWeekQuestions.length > 0 ? <QuestionsContainer questions={lastWeekQuestions} text={'Last Week'}/> : null }
-                        { olderQuestions.length > 0 ? <QuestionsContainer questions={olderQuestions} text={'Older'} /> : null }
+                    <InfiniteScroll dataLength={conversations.length} next={() => { }} hasMore={false} loader={<PulseLoader color={'#000000'} size={10} aria-label="Loading Spinner" data-testid="loader" />}>
+                        {todayQuestions.length >= 1 ? <QuestionsContainer questions={todayQuestions} text={'Today'} /> : null}
+                        {lastWeekQuestions.length > 0 ? <QuestionsContainer questions={lastWeekQuestions} text={'Last Week'} /> : null}
+                        {olderQuestions.length > 0 ? <QuestionsContainer questions={olderQuestions} text={'Older'} /> : null}
                     </InfiniteScroll>
                 </div>
                 <div className='w-72 bg-slate-200 z-10' onClick={handlePopup}>
-                    {popup ? <PopupMenu id={profileId} hanldeModal={hanldeModal}/> : null}
-                    <Profile id={profileId} />
+                    {popup ? <PopupMenu id={props.profileId} hanldeModal={hanldeModal}/> : null}
+                    <Profile id={props.profileId} />
                 </div>
             </div>
         </div>

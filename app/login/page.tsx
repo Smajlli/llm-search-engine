@@ -9,15 +9,15 @@ import Logo from '@/components/Logo';
 import Link from 'next/link';
 
 function Login() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
     const router = useRouter();
 
-    const handleEmail = (e) => {
+    const handleEmail = (e : React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value)
     }
 
-    const handlePassword = (e) => {
+    const handlePassword = (e : React.ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value)
     }
 

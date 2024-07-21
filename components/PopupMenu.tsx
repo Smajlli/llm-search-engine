@@ -6,9 +6,10 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/utils/supabase/supabase';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { User } from '@/types/types';
 
 function PopupMenu({ id, hanldeModal }) {
-    const [profile, setProfile] = useState();
+    const [profile, setProfile] = useState<User[]>();
     const router = useRouter();
 
     useEffect(() => {
@@ -20,7 +21,7 @@ function PopupMenu({ id, hanldeModal }) {
     }, [])
 
     const handleLogout = async () => {
-        const {err} = await supabase.auth.signOut();
+        await supabase.auth.signOut();
         router.refresh();
     }
 
@@ -44,7 +45,7 @@ function PopupMenu({ id, hanldeModal }) {
                 >
                     <path
                         fillRule="evenodd"
-                        clilRule="evenodd"
+                        clipRule="evenodd"
                         d="M7 3C8.86384 3 10.4299 4.27477 10.874 6H19V8H10.874C10.4299 9.72523 8.86384 11 7 11C4.79086 11 3 9.20914 3 7C3 4.79086 4.79086 3 7 3ZM7 9C8.10457 9 9 8.10457 9 7C9 5.89543 8.10457 5 7 5C5.89543 5 5 5.89543 5 7C5 8.10457 5.89543 9 7 9Z"
                         fill="currentColor"
                     />

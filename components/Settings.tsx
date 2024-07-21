@@ -9,23 +9,24 @@ import avatar from '@/public/Avatar1.svg'
 import axios from 'axios';
 import PulseLoader from 'react-spinners/PulseLoader';
 import Switcher from './Switcher';
+import { User } from '@/types/types';
 
-function Settings({profile, handleSettings, mode}) {
-    const [avatarImg, setAvatarImg] = useState('');
-    const [user, setUser] = useState();
-    const [loading, setLoading] = useState(false);
+function Settings(props : {profile, handleSettings, mode}) {
+    const [avatarImg, setAvatarImg] = useState<string>('');
+    const [user, setUser] = useState<User[]>();
+    const [loading, setLoading] = useState<boolean>(false);
     const data = new FormData();
 
     useEffect(() => {
         async function getUser() {
-            const { data } = await supabase.from('profiles').select('*').eq('id', profile.id);
+            const { data } = await supabase.from('profiles').select('*').eq('id', props.profile.id);
             setUser(data);
         }
         getUser();
     }, [])
 
     const handleNewAvatar = async () => {
-        data.append('user', profile.id);
+        data.append('user', props.profile.id);
         setLoading(true);
         setTimeout(() => setLoading(false), 1000)
         try {
@@ -41,7 +42,7 @@ function Settings({profile, handleSettings, mode}) {
 
     const handleSaveAvatar = async () => {
         try {
-            await supabase.from('profiles').update({ profile_image: `/${avatarImg}.svg` }).eq('id', profile.id)
+            await supabase.from('profiles').update({ profile_image: `/${avatarImg}.svg` }).eq('id', props.profile.id)
         } catch(err) {
             console.log(err)
         }       
@@ -49,18 +50,18 @@ function Settings({profile, handleSettings, mode}) {
 
     const deleteChats = async () => {
         try {
-            const {error} = await supabase.from('conversations').delete().eq('profile_id', profile.id)
+            const {error} = await supabase.from('conversations').delete().eq('profile_id', props.profile.id)
         } catch(error) {
             console.log(error);
         }
     }
 
     const closeSettings = () => {
-        handleSettings();
+        props.handleSettings();
     }
 
     const changeMode = () => {
-        mode();
+        props.mode();
     }
 
     if(!user) {

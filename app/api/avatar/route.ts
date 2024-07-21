@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/utils/supabase/supabase";
 
-export async function POST(req) {
-    const avatars = [
+export async function POST(req: Request) {
+    const avatars: string[] = [
         'Avatar1',        
         'Avatar2',        
         'Avatar3',        
@@ -12,9 +11,7 @@ export async function POST(req) {
         'Avatar7',        
     ]
 
-    const randomNum = Math.floor(Math.random() * 6);
-
-    const reqData = await req.formData();
+    const randomNum: number = Math.floor(Math.random() * 6);
 
     return NextResponse.json(avatars[randomNum]);
 }

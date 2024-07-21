@@ -3,22 +3,23 @@ import { supabase } from "@/utils/supabase/supabase";
 import Groq from "groq-sdk";
 import axios from "axios";
 import { convert } from "html-to-text";
+import { ChatHistory } from "@/types/types";
 
 const groq = new Groq({apiKey: process.env.GROQ_KEY});
 
-export async function POST(req) {
+export async function POST(req: Request) {
     
     const reqData = await req.formData();
 
-    const question = reqData.get('key');
-    const userId = reqData.get('userId');
-    const convoId = reqData.get('convoId');
+    const question: FormDataEntryValue = reqData.get('key');
+    const userId: FormDataEntryValue = reqData.get('userId');
+    const convoId: FormDataEntryValue = reqData.get('convoId');
 
-    let chatHistory = [];
+    let chatHistory: ChatHistory[] = [];
     let results = [];
-    let links = [];
-    let requestPromises = [];
-    let request = [];
+    let links: string[] = [];
+    let requestPromises: string[] = [];
+    let request: string[] = [];
 
     try {
         await axios.get(`https://www.googleapis.com/customsearch/v1`, {
@@ -76,7 +77,7 @@ export async function POST(req) {
     async function getContent() {
         for (let i = 0; i < links.length - 7; i++) {
             requestPromises.push(
-                axios.get(links[i]).then((res) => {
+                await axios.get(links[i]).then((res) => {
                     const htmlContent = res.data;
                     const plainContent = convert(htmlContent, {
                         selectors: [

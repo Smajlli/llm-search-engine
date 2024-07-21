@@ -2,10 +2,10 @@ import '@/app/globals.css'
 import Link from 'next/link';
 import Logo from './Logo';
 
-function Navbar({handleSidebar}) {
+function Navbar(props : {handleSidebar}) {
 
     const sidebarOpenClose = () => {
-        handleSidebar();
+        props.handleSidebar();
     }
 
     return <div className='w-full h-10 flex flex-row justify-between items-center px-4 block sm:hidden dark:bg-slate-800'>

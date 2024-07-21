@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { supabase } from "@/utils/supabase/supabase";
+import { User } from "@/types/types";
 
 export default function Home() {
-  const [profile, setProfile] = useState();
+  const [profile, setProfile] = useState<User>();
 
   useEffect(() => {
     async function getProfile() {

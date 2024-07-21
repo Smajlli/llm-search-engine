@@ -3,15 +3,15 @@ import '@/app/globals.css'
 import { supabase } from '@/utils/supabase/supabase';
 import { useRouter } from 'next/navigation';
 
-function EditChat({id, handleEdit}) {
+function EditChat(props : {id : string, handleEdit}) {
     const router = useRouter();
 
     const handleDelete = async () => {
-        const {error} = await supabase.from('conversations').delete().eq('id', id);
+        const {error} = await supabase.from('conversations').delete().eq('id', props.id);
         if(error) {
             console.log(error)
         }
-        handleEdit();
+        props.handleEdit();
         router.refresh();
     }
 

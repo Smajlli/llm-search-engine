@@ -4,14 +4,15 @@ import { supabase } from '@/utils/supabase/supabase';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import PopupMenu from './PopupMenu';
+import { User } from '@/types/types';
 
-function Profile({id}) {
-    const [profile, setProfile] = useState();
+function Profile(props : {id : string}) {
+    const [profile, setProfile] = useState<User[]>();
   
 
     useEffect(() => {
         async function getProfile() {
-            const {data} = await supabase.from('profiles').select('*').eq('id', id);
+            const {data} = await supabase.from('profiles').select('*').eq('id', props.id);
             setProfile(data);
         }
         getProfile();
@@ -23,7 +24,7 @@ function Profile({id}) {
     } else {
         return <>
             <div className='flex flex-row items-center w-72 p-2 bottom-0 absolute overflow-hidden bg-slate-50 hover:cursor-pointer hover:bg-slate-200 duration-200 border rounded-xl border-none dark:bg-slate-800 dark:hover:bg-slate-700'>
-                {profile[0].profile_image ? <Image className='mr-4' src={profile[0].profile_image} width={35} height={35} /> : <div className='w-9 h-9 bg-slate-300 rounded-full flex items-center justify-center mr-4'> <svg
+                {profile[0].profile_image ? <Image className='mr-4' src={profile[0].profile_image} width={35} height={35} alt='profile_image'/> : <div className='w-9 h-9 bg-slate-300 rounded-full flex items-center justify-center mr-4'> <svg
                     width="26"
                     height="26"
                     viewBox="0 0 24 24"

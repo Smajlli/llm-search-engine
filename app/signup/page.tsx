@@ -1,37 +1,37 @@
 'use client'
 
 import '@/app/globals.css'
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { supabase } from '@/utils/supabase/supabase';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Logo from '@/components/Logo';
 
 function Signup() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [username, setUsername] = useState('');
-    const [fullname, setFullname] = useState('');
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [username, setUsername] = useState<string>('');
+    const [fullname, setFullname] = useState<string>('');
     const router = useRouter();
-    const logo = ':)';
+    const logo : string = ':)'
 
-    const handleEmail = (e) => {
+    const handleEmail = (e : React.ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value);
     }
 
-    const handlePassword = (e) => {
+    const handlePassword = (e : React.ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value);
     }
 
-    const handleUsername = (e) => {
+    const handleUsername = (e : React.ChangeEvent<HTMLInputElement>) => {
         setUsername(e.target.value);
     }
 
-    const handleFullname = (e) => {
+    const handleFullname = (e : React.ChangeEvent<HTMLInputElement>) => {
         setFullname(e.target.value);
     }
 
-    const handleSignup = async (e) => {
+    const handleSignup = async (e : React.MouseEvent<HTMLFormElement>) => {
         e.preventDefault();        
         await supabase.auth.signUp({
             email, 

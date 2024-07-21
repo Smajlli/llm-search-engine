@@ -5,21 +5,22 @@ import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/utils/supabase/supabase';
 import Profile from './Profile';
 import PopupMenu from './PopupMenu';
-import Question from './Question';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Link from 'next/link';
 import QuestionsContainer from './QuestionsContainer';
+import { Conversations } from '@/types/types';
+import PulseLoader from 'react-spinners/PulseLoader';
 
-function Sidebar({profileId, handleSettings, handleSidebar}) {
-    const [profileHistory, setProfileHistory] = useState([]);
-    const [popup, setPopup] = useState(false);
-    const [todayQuestions, setTodayQuestions] = useState([]);
-    const [lastWeekDates, setLastWeek] = useState([]);
-    const [lastWeekQuestions, setLastWeekQuestions] = useState([]);
-    const [olderQuestions, setOlderQestions] = useState([]);
+function Sidebar(props : {profileId: string, handleSettings, handleSidebar}) {
+    const [profileHistory, setProfileHistory] = useState<Conversations[]>([]);
+    const [popup, setPopup] = useState<boolean>(false);
+    const [todayQuestions, setTodayQuestions] = useState<Conversations[]>([]);
+    const [lastWeek, setLastWeek] = useState<String[]>([]);
+    const [lastWeekQuestions, setLastWeekQuestions] = useState<Conversations[]>([]);
+    const [olderQuestions, setOlderQestions] = useState<Conversations[]>([]);
     const date = new Date();
-    let today = '';
-    const renderCount = useRef(0);
+    let today: string = '';
+    const renderCount = useRef<number>(0);
 
     const getToday = () => {
         let month = '' + (date.getMonth() + 1);
@@ -38,7 +39,7 @@ function Sidebar({profileId, handleSettings, handleSidebar}) {
 
     useEffect(() => {
         async function getHistory() {
-            const { data } = await supabase.from('conversations').select('*').eq('profile_id', profileId)
+            const { data } = await supabase.from('conversations').select('*').eq('profile_id', props.profileId)
             setProfileHistory(data)
         }
         getHistory();
@@ -56,11 +57,11 @@ function Sidebar({profileId, handleSettings, handleSidebar}) {
 
     useEffect(() => {
         if (renderCount.current === 2) {
-            if (profileHistory && lastWeekDates) {
+            if (profileHistory && lastWeek) {
                 profileHistory.map((q) => {
                     if (q.created_at === today) {
                         setTodayQuestions(curr => [...curr, q]);
-                    } else if (lastWeekDates.includes(q.created_at)) {
+                    } else if (lastWeek.includes(q.created_at)) {
                         setLastWeekQuestions(curr => [...curr, q]);
                     } else {
                         setOlderQestions(curr => [...curr, q]);
@@ -76,11 +77,11 @@ function Sidebar({profileId, handleSettings, handleSidebar}) {
     }
 
     const hanldeModal = () => {
-        handleSettings();
+        props.handleSettings();
     }
 
     const sidebarOpenClose = () => {
-        handleSidebar();
+        props.handleSidebar();
     }
 
     if (!profileHistory || profileHistory.length === 0) {
@@ -124,15 +125,15 @@ function Sidebar({profileId, handleSettings, handleSidebar}) {
                 </div>
                 <div className='h-full flex flex-col justify-between mt-4'>
                     <div className='h-4/6 overflow-auto relative'>
-                        <InfiniteScroll dataLength={profileHistory.length}>
+                    <InfiniteScroll dataLength={profileHistory.length} next={() => { }} hasMore={false} loader={<PulseLoader color={'#000000'} size={10} aria-label="Loading Spinner" data-testid="loader" />}>
                             {todayQuestions.length >= 1 ? <QuestionsContainer questions={todayQuestions} text={'Today'} /> : null}
                             {lastWeekQuestions.length > 0 ? <QuestionsContainer questions={lastWeekQuestions} text={'Last Week'} /> : null}
                             {olderQuestions.length > 0 ? <QuestionsContainer questions={olderQuestions} text={'Older'} /> : null}
                         </InfiniteScroll>
                     </div>
                     <div className='w-72 bg-slate-200 z-10' onClick={handlePopup}>
-                        {popup ? <PopupMenu id={profileId} hanldeModal={hanldeModal} /> : null}
-                        <Profile id={profileId} />
+                        {popup ? <PopupMenu id={props.profileId} hanldeModal={hanldeModal} /> : null}
+                        <Profile id={props.profileId} />
                     </div>
                 </div>
             </div>
