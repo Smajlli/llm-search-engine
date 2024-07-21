@@ -2,7 +2,7 @@ import '@/app/globals.css'
 import Link from 'next/link';
 import Logo from './Logo';
 
-function Navbar(props : {handleSidebar}) {
+function Navbar(props : {handleSidebar : () => void}) {
 
     const sidebarOpenClose = () => {
         props.handleSidebar();

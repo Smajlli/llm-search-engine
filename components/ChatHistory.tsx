@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { Conversations } from '@/types/types';
 import PulseLoader from 'react-spinners/PulseLoader'
 
-function ChatHistory(props: {profileId?: string, handleSettings?, toggle?, refresh?, latestConvo? : Conversations }) {
+function ChatHistory(props: {profileId?: string, handleSettings? : () => void, toggle? : () => void, refresh? : number, latestConvo? : Conversations }) {
     const [conversations, setConversations] = useState<Conversations[]>([]);
     const [todayQuestions, setTodayQuestions] = useState<Conversations[]>([]);
     const [lastWeek, setLastWeek] = useState<string[]>([]);

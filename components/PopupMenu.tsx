@@ -8,13 +8,13 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { User } from '@/types/types';
 
-function PopupMenu({ id, hanldeModal }) {
+function PopupMenu(props : { id : string, hanldeModal : () => void }) {
     const [profile, setProfile] = useState<User[]>();
     const router = useRouter();
 
     useEffect(() => {
         async function getProfile() {
-            const {data} = await supabase.from('profiles').select('*').eq('id', id);
+            const {data} = await supabase.from('profiles').select('*').eq('id', props.id);
             setProfile(data);
         }
         getProfile();
@@ -26,7 +26,7 @@ function PopupMenu({ id, hanldeModal }) {
     }
 
     const handleSettingsModal = () => {
-        hanldeModal();
+        props.hanldeModal();
     }
 
     if(!profile || profile.length === 0) {

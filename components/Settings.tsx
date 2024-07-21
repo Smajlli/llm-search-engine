@@ -11,7 +11,7 @@ import PulseLoader from 'react-spinners/PulseLoader';
 import Switcher from './Switcher';
 import { User } from '@/types/types';
 
-function Settings(props : {profile, handleSettings, mode}) {
+function Settings(props : {profile : User, handleSettings : () => void, mode : () => void}) {
     const [avatarImg, setAvatarImg] = useState<string>('');
     const [user, setUser] = useState<User[]>();
     const [loading, setLoading] = useState<boolean>(false);

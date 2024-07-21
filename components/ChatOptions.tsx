@@ -1,7 +1,7 @@
 import '@/app/globals.css'
 import Link from 'next/link';
 
-function ChatOptions(props : {chatHistory}) {
+function ChatOptions(props : {chatHistory: () => void}) {
 
     const handleChatHistory = () => {
         props.chatHistory();

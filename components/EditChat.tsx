@@ -3,7 +3,7 @@ import '@/app/globals.css'
 import { supabase } from '@/utils/supabase/supabase';
 import { useRouter } from 'next/navigation';
 
-function EditChat(props : {id : string, handleEdit}) {
+function EditChat(props : {id : string, handleEdit : () => void}) {
     const router = useRouter();
 
     const handleDelete = async () => {

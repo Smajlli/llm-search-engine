@@ -11,7 +11,7 @@ import QuestionsContainer from './QuestionsContainer';
 import { Conversations } from '@/types/types';
 import PulseLoader from 'react-spinners/PulseLoader';
 
-function Sidebar(props : {profileId: string, handleSettings, handleSidebar}) {
+function Sidebar(props : {profileId: string, handleSettings : () => void, handleSidebar : () => void}) {
     const [profileHistory, setProfileHistory] = useState<Conversations[]>([]);
     const [popup, setPopup] = useState<boolean>(false);
     const [todayQuestions, setTodayQuestions] = useState<Conversations[]>([]);
