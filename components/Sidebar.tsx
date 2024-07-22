@@ -8,16 +8,16 @@ import PopupMenu from './PopupMenu';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Link from 'next/link';
 import QuestionsContainer from './QuestionsContainer';
-import { Conversations } from '@/types/types';
+import { Conversation } from '@/types/types';
 import PulseLoader from 'react-spinners/PulseLoader';
 
 function Sidebar(props : {profileId: string, handleSettings : () => void, handleSidebar : () => void}) {
-    const [profileHistory, setProfileHistory] = useState<Conversations[]>([]);
+    const [profileHistory, setProfileHistory] = useState<Conversation[]>([]);
     const [popup, setPopup] = useState<boolean>(false);
-    const [todayQuestions, setTodayQuestions] = useState<Conversations[]>([]);
+    const [todayQuestions, setTodayQuestions] = useState<Conversation[]>([]);
     const [lastWeek, setLastWeek] = useState<String[]>([]);
-    const [lastWeekQuestions, setLastWeekQuestions] = useState<Conversations[]>([]);
-    const [olderQuestions, setOlderQestions] = useState<Conversations[]>([]);
+    const [lastWeekQuestions, setLastWeekQuestions] = useState<Conversation[]>([]);
+    const [olderQuestions, setOlderQestions] = useState<Conversation[]>([]);
     const date = new Date();
     let today: string = '';
     const renderCount = useRef<number>(0);

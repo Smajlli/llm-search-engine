@@ -8,15 +8,15 @@ import PopupMenu from './PopupMenu';
 import QuestionsContainer from './QuestionsContainer';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Link from 'next/link';
-import { Conversations } from '@/types/types';
+import { Conversation } from '@/types/types';
 import PulseLoader from 'react-spinners/PulseLoader'
 
-function ChatHistory(props: {profileId?: string, handleSettings? : () => void, toggle? : () => void, refresh? : number, latestConvo? : Conversations }) {
-    const [conversations, setConversations] = useState<Conversations[]>([]);
-    const [todayQuestions, setTodayQuestions] = useState<Conversations[]>([]);
+function ChatHistory(props: {profileId?: string, handleSettings? : () => void, toggle? : () => void, refresh? : number, latestConvo? : Conversation }) {
+    const [conversations, setConversations] = useState<Conversation[]>([]);
+    const [todayQuestions, setTodayQuestions] = useState<Conversation[]>([]);
     const [lastWeek, setLastWeek] = useState<string[]>([]);
-    const [lastWeekQuestions, setLastWeekQuestions] = useState<Conversations[]>([]);
-    const [olderQuestions, setOlderQestions] = useState<Conversations[]>([]);
+    const [lastWeekQuestions, setLastWeekQuestions] = useState<Conversation[]>([]);
+    const [olderQuestions, setOlderQestions] = useState<Conversation[]>([]);
     const [popup, setPopup] = useState<boolean>(false);
     const date = new Date();
     let today: string = '';

@@ -15,7 +15,7 @@ import Navbar from '@/components/Navbar';
 import Sidebar from '@/components/Sidebar';
 import ChatOptions from '@/components/ChatOptions';
 import Logo from '@/components/Logo';
-import { Answer, Conversations, ResponseType, User } from '@/types/types';
+import { Answer, Conversation, ResponseType, User } from '@/types/types';
 
 function Chat() {
 
@@ -31,7 +31,7 @@ function Chat() {
     const [sidebar, setSidebar] = useState<boolean>(false);
     const [chatHistory, setChatHistory] = useState<boolean>(true);
     const [seed, setSeed] = useState<number | null>(null);
-    const [latestConvo, setLatestConvo] = useState<Conversations>();
+    const [latestConvo, setLatestConvo] = useState<Conversation>();
     const [darkMode, setDarkMode] = useState<boolean>(false);
     const data = new FormData();
     const renderCount = useRef<number>(0);
