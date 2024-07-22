@@ -37,7 +37,7 @@ function Login() {
     return <div className='h-screen flex h-full w-full flex flex-col sm:flex-row dark:bg-slate-900'>
             <div className=' justify-center flex-col items-center bg-slate-100 h-full w-full hidden sm:flex dark:bg-slate-800 dark:text-white'>
                 <div className='text-6xl font-bold flex flex-row items-center'>
-                    <Logo/>
+                    <Logo width={150} height={150}/>
                     <div>SSays</div>
                 </div>
                 <div className='mt-6'>Large Language Model App</div>

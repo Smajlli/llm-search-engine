@@ -49,8 +49,8 @@ function Signup() {
 
     return <div className='h-screen flex w-full h-full flex flex-col sm:flex-row dark:bg-slate-900'>
         <div className='flex justify-center flex-col items-center bg-slate-100 h-full w-full hidden sm:flex dark:bg-slate-800 dark:text-white'>
-            <div className='flex flex-row items-center'><Logo /> <div className='text-6xl font-bold'>SSays</div></div>
-            <div className='mt-6'>Large Laguange Model App</div>
+            <div className='flex flex-row items-center'><Logo width={150} height={150} /> <div className='text-6xl font-bold'>SSays</div></div>
+            <div className='mt-6'>Large Language Model App</div>
             <div className='font-thin'>powered by Amer Smajlovic</div>
         </div>
         <div className="flex justify-center flex-col items-center bg-slate-100 h-1/5 w-full sm:hidden dark:bg-slate-800 dark:text-white">
