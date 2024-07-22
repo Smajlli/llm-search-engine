@@ -1,10 +1,8 @@
 import '@/app/globals.css'
 
 import { supabase } from '@/utils/supabase/supabase';
-import { useRouter } from 'next/navigation';
 
 function EditChat(props : {id : string, handleEdit : () => void}) {
-    const router = useRouter();
 
     const handleDelete = async () => {
         const {error} = await supabase.from('conversations').delete().eq('id', props.id);
@@ -12,7 +10,7 @@ function EditChat(props : {id : string, handleEdit : () => void}) {
             console.log(error)
         }
         props.handleEdit();
-        router.refresh();
+        location.reload()
     }
 
     return <div className='block hover:cursor-pointer'>
