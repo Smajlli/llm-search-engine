@@ -1,4 +1,4 @@
-function Logo(props : {width, height}) {
+function Logo(props : {width : number, height : number}) {
 
     return <svg xmlns="http://www.w3.org/2000/svg" width={props.width} height={props.height} viewBox="0 0 2480 3508" className="dark:text-white">
         <path
