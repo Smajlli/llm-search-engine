@@ -75,7 +75,7 @@ function ChatHistory(props: {profileId?: string, handleSettings? : () => void, t
                    }
                })
            }
-        } else if(renderCount.current > 4) {
+        } else if(renderCount.current > 4 && renderCount.current < 6) {
             if (conversations && lastWeek) {
                     if (conversations[conversations.length - 1].created_at === today) {
                         setTodayQuestions(curr => [...curr, conversations[conversations.length - 1]]);
