@@ -11,7 +11,7 @@ export async function POST(req: Request) {
         'Avatar7',        
     ]
 
-    const randomNum: number = Math.floor(Math.random() * 6);
+    const randomNum = Math.floor(Math.random() * 7) + 1;
 
     return NextResponse.json(avatars[randomNum]);
 }
