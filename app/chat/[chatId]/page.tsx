@@ -18,10 +18,10 @@ import { Answer, Dialog, ResponseType, User } from '@/types/types';
 function Chat({params}) {
     const [answer, setAnswer] = useState<Answer>();
     const [question, setQuestion] = useState<string>('');
-    const [response, setResponse] = useState<ResponseType[]>();
+    const [response, setResponse] = useState<ResponseType[]>([]);
     const [isQuestion, setIsQuestion] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
-    const [conversation, setConversation] = useState<Dialog[]>();
+    const [conversation, setConversation] = useState<Dialog[]>([]);
     const [user, setUser] = useState<User>();
     const [settings, setSettings] = useState<boolean>(false);
     const [sidebar, setSidebar] = useState<boolean>(false);
